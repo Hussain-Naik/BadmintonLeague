@@ -2,9 +2,9 @@ import React from 'react'
 
 const Session = () => {
   return (
-    <main>
-      
-    </main>
+    <div>
+      <p>Session details</p>
+    </div>
   )
 }
 

@@ -2,9 +2,9 @@ import React from 'react'
 
 const League = () => {
   return (
-    <main>
-      
-    </main>
+    <div>
+      <p>League Detail</p>
+    </div>
   )
 }
 
