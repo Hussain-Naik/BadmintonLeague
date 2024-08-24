@@ -11,7 +11,7 @@ const Header = () => {
       if (location.pathname.startsWith('/league/'))
         setItems()
       else if (location.pathname.startsWith('/session/'))
-        setItems([{ label: 'League' }])
+        setItems([{ label: 'League', url: '/BadmintonLeague/league/' }])
       else {
         console.log(location)
       }
@@ -20,9 +20,9 @@ const Header = () => {
   }, [location]);
   const home = { icon: 'pi pi-home', url: '/BadmintonLeague/' }
   return (
-    <header>
-      <h1>Badminton League</h1>
-      <BreadCrumb model={items} home={home} />
+    <header className='col-12 md:col-6 m-auto p-0'>
+      <h1 className='text-center'>Badminton League</h1>
+      <BreadCrumb model={items} home={home} className='border-none px-1'/>
     </header>
   )
 }
