@@ -9,14 +9,16 @@ import Session from './pages/session/Session';
 
 function App() {
   return (
-    <div className={styles.App}>
+    <div className="flex flex-column justify-content-between min-h-screen">
       <Header />
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="/league/:id" element={<League />} />
-        <Route exact path="/session/:id" element={<Session />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <main className='col-12 md:col-6 flex-grow-1 m-auto p-0'>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/league/:id" element={<League />} />
+          <Route exact path="/session/:id" element={<Session />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
       <Footer />
     </div>
   );

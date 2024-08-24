@@ -18,10 +18,10 @@ const Header = () => {
     };
     path();
   }, [location]);
-  // const items = [{ label: 'Electronics' }, { label: 'Computer' }];
   const home = { icon: 'pi pi-home', url: '/BadmintonLeague/' }
   return (
     <header>
+      <h1>Badminton League</h1>
       <BreadCrumb model={items} home={home} />
     </header>
   )
