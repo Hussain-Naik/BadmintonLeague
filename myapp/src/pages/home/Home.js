@@ -7,8 +7,8 @@ const Home = () => {
   return (
     <div>
       <p>home</p>
-      <Button label="League" icon="pi pi-plus"/>
-      <CreateLeague />
+      <Button label="League" icon="pi pi-plus" onClick={()=>{setVisible(true)}}/>
+      <CreateLeague visible={visible} setVisible={setVisible}/>
     </div>
   )
 }
