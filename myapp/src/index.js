@@ -9,12 +9,18 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { LeagueContextProvider } from './context/LeagueContext';
+import { SessionContextProvider } from './context/SessionContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router basename="/BadmintonLeague" >
     <PrimeReactProvider>
-      <App />
+      <LeagueContextProvider>
+        <SessionContextProvider>
+          <App />
+        </SessionContextProvider>
+      </LeagueContextProvider>
     </PrimeReactProvider>
   </Router>
 );
