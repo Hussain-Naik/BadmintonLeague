@@ -23,14 +23,18 @@ const League = () => {
   return (
     <div>
       <p>League Leaderboard {leagueContext}</p>
-      <Button
-        label="Session"
-        icon="pi pi-plus"
-        onClick={() => {
-          setVisible(true);
-        }}
-      />
-      <SessionItems />
+      <div className="flex flex-row justify-content-between py-2">
+        <Button
+          label="Session"
+          icon="pi pi-plus"
+          onClick={() => {
+            setVisible(true);
+          }}
+        />
+      </div>
+      <div className="grid">
+        <SessionItems />
+      </div>
       <CreateSession visible={visible} setVisible={setVisible} />
     </div>
   );

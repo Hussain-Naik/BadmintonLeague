@@ -22,6 +22,7 @@ const Home = () => {
 
   return (
     <div>
+      <div className='flex flex-row justify-content-between py-2'>
       <Button
         label="League"
         size="small"
@@ -30,7 +31,16 @@ const Home = () => {
           setVisible(true);
         }}
       />
-      <div className="grid m-2">
+      <Button
+        label="League"
+        size="small"
+        icon="pi pi-plus"
+        onClick={() => {
+          setVisible(true);
+        }}
+      />
+      </div>
+      <div className="grid">
         <LeagueItems />
       </div>
       <CreateLeague visible={visible} setVisible={setVisible} />
