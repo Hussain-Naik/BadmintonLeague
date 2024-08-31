@@ -22,7 +22,6 @@ const Home = () => {
 
   return (
     <div>
-      <p>{leagueContext}</p>
       <Button
         label="League"
         size="small"
