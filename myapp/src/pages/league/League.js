@@ -4,6 +4,7 @@ import CreateSession from "../session/CreateSession";
 import { useLeagueContext } from "../../context/LeagueContext";
 import { useSessionContext } from "../../context/SessionContext";
 import { removeSessionToken } from "../../utils/utils";
+import SessionItems from "../session/SessionItems";
 
 const League = () => {
   const [visible, setVisible] = useState(false);
@@ -30,6 +31,7 @@ const League = () => {
           setVisible(true);
         }}
       />
+      <SessionItems />
       <CreateSession visible={visible} setVisible={setVisible} />
     </div>
   );

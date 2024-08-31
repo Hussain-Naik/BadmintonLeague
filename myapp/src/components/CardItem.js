@@ -13,7 +13,11 @@ const CardItem = (props) => {
           className="flex align-items-center justify-content-center bg-blue-100 border-round"
           style={{ width: "2.5rem", height: "2.5rem" }}
         >
-          <i className="pi pi-trophy text-blue-500 text-xl"></i>
+          {title == "League" ? (
+            <i className="pi pi-trophy text-blue-500 text-xl"></i>
+          ) : (
+            <i className="pi pi-calendar text-blue-500 text-xl"></i>
+          )}
         </div>
       </div>
       <span className="text-green-500 font-medium">{count} </span>
