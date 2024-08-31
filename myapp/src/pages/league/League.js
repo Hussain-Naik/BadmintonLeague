@@ -9,11 +9,8 @@ import SessionItems from "../session/SessionItems";
 const League = () => {
   const [visible, setVisible] = useState(false);
   const { leagueContext, setLeagueContext } = useLeagueContext();
-  const { sessionContext, setSessionContext } = useSessionContext();
 
   const handleMount = () => {
-    setSessionContext(null);
-    removeSessionToken();
   };
 
   useEffect(() => {
