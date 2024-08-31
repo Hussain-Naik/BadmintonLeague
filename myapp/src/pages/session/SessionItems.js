@@ -2,6 +2,7 @@ import React from "react";
 import CardItem from "../../components/CardItem";
 import { useNavigate } from "react-router-dom";
 import { useSessionContext } from "../../context/SessionContext";
+import { setSessionToken } from "../../utils/utils";
 
 const SessionItems = () => {
   // const { id, name, count } = props
@@ -11,6 +12,7 @@ const SessionItems = () => {
 
   const handleClick = () => {
     setSessionContext(sessionObject.name);
+    setSessionToken(sessionObject.name)
     navigate("/session/");
   };
 

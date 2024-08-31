@@ -10,7 +10,6 @@ const League = () => {
   const [visible, setVisible] = useState(false);
   const { leagueContext, setLeagueContext } = useLeagueContext();
   const { sessionContext, setSessionContext } = useSessionContext();
-  console.log(leagueContext);
 
   const handleMount = () => {
     setSessionContext(null);

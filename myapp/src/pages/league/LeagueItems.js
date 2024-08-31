@@ -2,6 +2,7 @@ import React from "react";
 import CardItem from "../../components/CardItem";
 import { useNavigate } from "react-router-dom";
 import { useLeagueContext } from "../../context/LeagueContext";
+import { setLeagueToken } from "../../utils/utils";
 
 const LeagueItems = () => {
   // const { id, name, count } = props
@@ -11,6 +12,7 @@ const LeagueItems = () => {
 
   const handleClick = () => {
     setLeagueContext(leagueObject.name);
+    setLeagueToken(leagueObject.name)
     navigate("league/");
   };
 
