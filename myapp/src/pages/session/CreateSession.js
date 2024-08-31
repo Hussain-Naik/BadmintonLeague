@@ -1,9 +1,9 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
-import { Button } from 'primereact/button';
+import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 
-const CreateSession = ({visible, setVisible}) => {
+const CreateSession = ({ visible, setVisible }) => {
   return (
     <div>
       <Dialog

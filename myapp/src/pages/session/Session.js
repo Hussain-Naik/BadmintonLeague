@@ -1,13 +1,13 @@
-import React from 'react'
-import { useSessionContext } from '../../context/SessionContext'
+import React from "react";
+import { useSessionContext } from "../../context/SessionContext";
 
 const Session = () => {
-  const sessionContext = useSessionContext()
+  const { sessionContext, setSessionContext } = useSessionContext();
   return (
     <div>
-      <p>Session details</p>
+      <p>Session details {sessionContext}</p>
     </div>
-  )
-}
+  );
+};
 
-export default Session
+export default Session;

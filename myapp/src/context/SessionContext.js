@@ -8,8 +8,8 @@ export const SessionContextProvider = ({ children }) => {
   const [sessionContext, setSessionContext] = useState(null);
 
   return (
-    <SessionContext.Provider value={{sessionContext, setSessionContext}}>
-        {children}
+    <SessionContext.Provider value={{ sessionContext, setSessionContext }}>
+      {children}
     </SessionContext.Provider>
   );
 };
