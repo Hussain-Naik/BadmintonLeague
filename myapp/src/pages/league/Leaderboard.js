@@ -4,12 +4,12 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 
 const Leaderboard = ({ setVisible }) => {
-  const [products, setProducts] = useState([]);
+  const data = [{player: 'Hussain', wins: 1}, {player: 'Tauseef', wins: 0}]
 
   return (
     <div className="col-12 lg:col-6">
       <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
-        <DataTable value={products} stripedRows showGridlines size="small">
+        <DataTable value={data} stripedRows showGridlines size="small">
           <Column field="player" header="Player"></Column>
           <Column field="wins" header="Wins"></Column>
         </DataTable>
