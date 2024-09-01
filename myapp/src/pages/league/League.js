@@ -19,11 +19,6 @@ const League = () => {
     <div>
       <div className="grid">
         <Leaderboard setVisible={setVisible}/>
-      </div>
-      <div className="flex flex-row justify-content-between py-2">
-        
-      </div>
-      <div className="grid">
         <SessionItems />
       </div>
       <CreateSession visible={visible} setVisible={setVisible} />
