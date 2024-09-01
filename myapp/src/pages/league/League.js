@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import CreateSession from "../session/CreateSession";
 import { useLeagueContext } from "../../context/LeagueContext";
-import { useSessionContext } from "../../context/SessionContext";
-import { removeSessionToken } from "../../utils/utils";
 import SessionItems from "../session/SessionItems";
+import Leaderboard from "./Leaderboard";
 
 const League = () => {
   const [visible, setVisible] = useState(false);
   const { leagueContext, setLeagueContext } = useLeagueContext();
 
-  const handleMount = () => {
-  };
+  const handleMount = () => {};
 
   useEffect(() => {
     handleMount();
@@ -19,15 +17,11 @@ const League = () => {
 
   return (
     <div>
-      <p>League Leaderboard {leagueContext}</p>
+      <div className="grid">
+        <Leaderboard setVisible={setVisible}/>
+      </div>
       <div className="flex flex-row justify-content-between py-2">
-        <Button
-          label="Session"
-          icon="pi pi-plus"
-          onClick={() => {
-            setVisible(true);
-          }}
-        />
+        
       </div>
       <div className="grid">
         <SessionItems />
