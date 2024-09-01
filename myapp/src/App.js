@@ -9,7 +9,7 @@ import Session from './pages/session/Session';
 
 function App() {
   return (
-    <div className="flex flex-column justify-content-between min-h-screen m-3">
+    <div className="flex flex-column justify-content-between min-h-screen mx-3">
       <Header />
       <main className='col-12 md:col-6 flex-grow-1 m-auto p-0'>
         <Routes>
