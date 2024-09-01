@@ -21,3 +21,9 @@ export const reloadSession = () => {
 export const removeSessionToken = () => {
   localStorage.removeItem('leagueSessionToken')
 }
+
+export const winPosition = (arg) => {
+  if (arg % 2 === 0)
+    return false
+  else return true
+}
