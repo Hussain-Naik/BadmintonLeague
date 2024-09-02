@@ -25,6 +25,24 @@ const Footer = () => {
     };
     reload();
   }, []);
+  const buttons = (
+    <>
+      <button
+        onClick={() => setVisible(true)}
+        className="p-link inline-flex justify-content-center align-items-center text-white h-2rem w-2rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200"
+      >
+        <i className="pi pi-plus text-2xl"></i>
+      </button>
+      {url ? (
+        <button
+          onClick={() => navigate(url)}
+          className="p-link inline-flex justify-content-center align-items-center text-white h-2rem w-2rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200"
+        >
+          <i className="pi pi-cloud-download text-2xl"></i>
+        </button>
+      ) : null}
+    </>
+  );
 
   const centerContent = (
     <div className="flex flex-wrap align-items-center gap-3">
@@ -34,22 +52,7 @@ const Footer = () => {
       >
         <i className="pi pi-home text-2xl"></i>
       </button>
-      {location.pathname !== "/session/" ? (
-        <button
-          onClick={() => setVisible(true)}
-          className="p-link inline-flex justify-content-center align-items-center text-white h-2rem w-2rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200"
-        >
-          <i className="pi pi-plus text-2xl"></i>
-        </button>
-      ) : null}
-      {url ? (
-        <button
-          onClick={() => navigate(url)}
-          className="p-link inline-flex justify-content-center align-items-center text-white h-2rem w-2rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200"
-        >
-          <i className="pi pi-cloud-download text-2xl"></i>
-        </button>
-      ) : null}
+      {location.pathname !== "/session/" ? buttons : null}
     </div>
   );
 
