@@ -61,10 +61,10 @@ const Footer = () => {
     );
 
   return (
-    <div className="card">
+    <div className="card sticky bottom-0">
       <Toolbar
         center={centerContent}
-        className="bg-gray-900 shadow-2 p-2"
+        className="bg-gray-900 shadow-2 p-2 my-1"
         style={{
           borderRadius: "3rem",
           backgroundImage:
