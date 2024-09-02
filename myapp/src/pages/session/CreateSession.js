@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
+import { Calendar } from "primereact/calendar";
 
 const CreateSession = ({ visible, setVisible }) => {
+  const [date, setDate] = useState(null);
+
   return (
     <div>
       <Dialog
@@ -22,32 +24,13 @@ const CreateSession = ({ visible, setVisible }) => {
                 "radial-gradient(circle at left top, var(--primary-400), var(--primary-700))",
             }}
           >
-            <div className="inline-flex flex-column gap-2">
-              <label
-                htmlFor="username"
-                className="text-primary-50 font-semibold"
-              >
-                Username
-              </label>
-              <InputText
-                id="username"
-                label="Username"
-                className="bg-white-alpha-20 border-none p-3 text-primary-50"
-              ></InputText>
-            </div>
-            <div className="inline-flex flex-column gap-2">
-              <label
-                htmlFor="username"
-                className="text-primary-50 font-semibold"
-              >
-                Username
-              </label>
-              <InputText
-                id="password"
-                label="Password"
-                className="bg-white-alpha-20 border-none p-3 text-primary-50"
-                type="password"
-              ></InputText>
+            <div className="card flex justify-content-center">
+              <Calendar
+                value={date}
+                onChange={(e) => setDate(e.value)}
+                inline
+                pt={{panel: {className: 'w-10'}}}
+              />
             </div>
             <div className="flex align-items-center gap-2">
               <Button

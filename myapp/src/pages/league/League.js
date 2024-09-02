@@ -4,7 +4,6 @@ import SessionItems from "../session/SessionItems";
 import Leaderboard from "./Leaderboard";
 
 const League = () => {
-  const [visible, setVisible] = useState(false);
   const { leagueContext, setLeagueContext } = useLeagueContext();
 
   const handleMount = () => {};
@@ -15,7 +14,7 @@ const League = () => {
 
   return (
     <div className="grid">
-      <Leaderboard setVisible={setVisible} />
+      <Leaderboard />
       <SessionItems />
     </div>
   );

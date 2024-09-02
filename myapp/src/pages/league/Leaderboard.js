@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { useLeagueContext } from "../../context/LeagueContext";
 
-const Leaderboard = ({ setVisible }) => {
+const Leaderboard = () => {
   const data = [{player: 'Hussain', wins: 1}, {player: 'Tauseef', wins: 0}]
   const { leagueContext, setLeagueContext } = useLeagueContext();
 
@@ -16,14 +16,6 @@ const Leaderboard = ({ setVisible }) => {
           <Column field="player" header="Player"></Column>
           <Column field="wins" header="Wins"></Column>
         </DataTable>
-        <Button
-          className="mt-2"
-          label="Session"
-          icon="pi pi-plus"
-          onClick={() => {
-            setVisible(true);
-          }}
-        />
       </div>
     </div>
   );
