@@ -24,29 +24,15 @@ const CreateLeague = ({ visible, setVisible }) => {
           >
             <div className="inline-flex flex-column gap-2">
               <label
-                htmlFor="username"
+                htmlFor="name"
                 className="text-primary-50 font-semibold"
               >
-                Username
+                League Name
               </label>
               <InputText
-                id="username"
-                label="Username"
+                id="name"
+                label="name"
                 className="bg-white-alpha-20 border-none p-3 text-primary-50"
-              ></InputText>
-            </div>
-            <div className="inline-flex flex-column gap-2">
-              <label
-                htmlFor="username"
-                className="text-primary-50 font-semibold"
-              >
-                Username
-              </label>
-              <InputText
-                id="password"
-                label="Password"
-                className="bg-white-alpha-20 border-none p-3 text-primary-50"
-                type="password"
               ></InputText>
             </div>
             <div className="flex align-items-center gap-2">

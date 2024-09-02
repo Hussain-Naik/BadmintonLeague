@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "primereact/button";
-import CreateSession from "../session/CreateSession";
 import { useLeagueContext } from "../../context/LeagueContext";
 import SessionItems from "../session/SessionItems";
 import Leaderboard from "./Leaderboard";
@@ -16,12 +14,9 @@ const League = () => {
   }, []);
 
   return (
-    <div>
-      <div className="grid">
-        <Leaderboard setVisible={setVisible}/>
-        <SessionItems />
-      </div>
-      <CreateSession visible={visible} setVisible={setVisible} />
+    <div className="grid">
+      <Leaderboard setVisible={setVisible} />
+      <SessionItems />
     </div>
   );
 };
