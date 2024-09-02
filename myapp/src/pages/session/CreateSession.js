@@ -2,9 +2,23 @@ import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
+import { useSessionContext } from "../../context/SessionContext";
+import { setSessionToken } from "../../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const CreateSession = ({ visible, setVisible }) => {
   const [date, setDate] = useState(null);
+  const { sessionContext, setSessionContext } = useSessionContext();
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    setDate(e.value);
+    console.log(date);
+    setSessionToken(e.value);
+    setSessionContext(date);
+    navigate("/session/");
+    setVisible(!visible);
+  };
 
   return (
     <div>
@@ -27,9 +41,11 @@ const CreateSession = ({ visible, setVisible }) => {
             <div className="card flex justify-content-center">
               <Calendar
                 value={date}
-                onChange={(e) => setDate(e.value)}
+                onChange={(e) => handleClick(e)}
                 inline
-                pt={{panel: {className: 'w-10'}}}
+                showTime
+                hourFormat="24"
+                pt={{ panel: { className: "w-10" } }}
               />
             </div>
             <div className="flex align-items-center gap-2">
