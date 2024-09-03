@@ -9,7 +9,7 @@ export const LeagueContextProvider = ({ children }) => {
 
   const handleMount = () => {
     try {
-      const data = localStorage.getItem('leagueToken')
+      const data = JSON.parse(localStorage.getItem('leagueToken'))
       setLeagueContext(data);
     } catch (err) {
     }

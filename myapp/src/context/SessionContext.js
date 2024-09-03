@@ -9,7 +9,7 @@ export const SessionContextProvider = ({ children }) => {
   
   const handleMount = () => {
     try {
-      const data = localStorage.getItem('leagueSessionToken')
+      const data = JSON.parse(localStorage.getItem('leagueSessionToken'))
       setSessionContext(data);
     } catch (err) {
     }

@@ -1,5 +1,5 @@
 export const setLeagueToken = (data) => {
-  localStorage.setItem('leagueToken', data)
+  localStorage.setItem('leagueToken', JSON.stringify(data))
 }
 
 export const reloadLeague = () => {
@@ -11,7 +11,7 @@ export const removeLeagueToken = () => {
 }
 
 export const setSessionToken = (data) => {
-  localStorage.setItem('leagueSessionToken', data)
+  localStorage.setItem('leagueSessionToken', JSON.stringify(data))
 }
 
 export const reloadSession = () => {

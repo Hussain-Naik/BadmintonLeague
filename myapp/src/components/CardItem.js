@@ -1,7 +1,7 @@
 import React from "react";
 
 const CardItem = (props) => {
-  const { title, name, count } = props;
+  const { title, name, count , id} = props;
   return (
     <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
       <div className="flex justify-content-between mb-3">

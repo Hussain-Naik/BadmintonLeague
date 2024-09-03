@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { useLeagueContext } from "../../context/LeagueContext";
 import { setLeagueToken } from "../../utils/utils";
 
-const LeagueItems = () => {
+const LeagueItems = (props) => {
   // const { id, name, count } = props
+  const {id, name} = props
   const navigate = useNavigate();
-  const leagueObject = { title: "League", name: "League1", count: 4 };
+  const leagueObject = { title: "League", name: name, count: 4 , id: id};
   const { leagueContext, setLeagueContext } = useLeagueContext();
 
   const handleClick = () => {
-    setLeagueContext(leagueObject.name);
-    setLeagueToken(leagueObject.name)
+    setLeagueContext(leagueObject);
+    setLeagueToken(leagueObject)
     navigate("league/");
   };
 
