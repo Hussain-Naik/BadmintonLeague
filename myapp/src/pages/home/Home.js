@@ -8,7 +8,7 @@ const Home = () => {
 
   const handleMount = async () => {
     try {
-      const { data } = await axiosReq.get(sLeague);
+      const { data } = await axiosReq.get();
       setLeagueList(data.data)
       setLoaded(true)
       console.log(data.data)
