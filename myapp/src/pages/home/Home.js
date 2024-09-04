@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LeagueItems from "../league/LeagueItems";
-import { axiosReq, sLeague } from "../../api/axiosDefaults";
+import { axiosAPI, axiosReq, sLeague } from "../../api/axiosDefaults";
 
 const Home = () => {
   const [loaded, setLoaded] = useState(false)
@@ -8,7 +8,7 @@ const Home = () => {
 
   const handleMount = async () => {
     try {
-      const { post } = await axiosReq.post('/exec?e=LEAGUE')
+      const { post } = await axiosAPI.post('/exec?e=LEAGUE')
       const { data } = await axiosReq.get();
       setLeagueList(data.data)
       setLoaded(true)
