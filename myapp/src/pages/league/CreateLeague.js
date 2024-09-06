@@ -13,6 +13,8 @@ const CreateLeague = ({ visible, setVisible }) => {
     const jObj = JSON.stringify(postObject);
     try {
       const { post } = await axiosReq.post(`/exec?post=${jObj}`);
+      setVisible(!visible)
+      // add naviagte to league and setleaguecontent for newly created leagues
     } catch (error) {}
   };
 
@@ -58,7 +60,7 @@ const CreateLeague = ({ visible, setVisible }) => {
             <div className="flex align-items-center gap-2">
               <Button
                 label="Submit"
-                onClick={() => handleSubmit()}
+                onClick={(e) => handleSubmit()}
                 text
                 className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"
               ></Button>
