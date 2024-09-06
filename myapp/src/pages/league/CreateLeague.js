@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
+import { FloatLabel } from "primereact/floatlabel";
+import { axiosReq } from "../../api/axiosDefaults";
 
 const CreateLeague = ({ visible, setVisible }) => {
+  const [iName, setIName] = useState("");
+
+  const handleSubmit = async () => {
+    const postObject = { 1: { sheetname: "LEAGUE", name: iName } };
+    const jObj = JSON.stringify(postObject);
+    try {
+      const { post } = await axiosReq.post(`/exec?post=${jObj}`);
+    } catch (error) {}
+  };
+
+  const handleChange = (event) => {
+    setIName(event.target.value);
+  };
+
   return (
     <div>
       <Dialog
@@ -23,22 +39,26 @@ const CreateLeague = ({ visible, setVisible }) => {
             }}
           >
             <div className="inline-flex flex-column gap-2">
-              <label
-                htmlFor="name"
-                className="text-primary-50 font-semibold"
-              >
-                League Name
-              </label>
-              <InputText
-                id="name"
-                label="name"
-                className="bg-white-alpha-20 border-none p-3 text-primary-50"
-              ></InputText>
+              <FloatLabel>
+                <InputText
+                  value={iName}
+                  onChange={handleChange}
+                  label="Name"
+                  name="name"
+                  className="bg-white-alpha-20 border-none p-3 text-primary-50"
+                ></InputText>
+                <label
+                  htmlFor="name"
+                  className="text-primary-50 font-semibold capitalize"
+                >
+                  League Name
+                </label>
+              </FloatLabel>
             </div>
             <div className="flex align-items-center gap-2">
               <Button
-                label="Sign-In"
-                onClick={(e) => hide(e)}
+                label="Submit"
+                onClick={() => handleSubmit()}
                 text
                 className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"
               ></Button>

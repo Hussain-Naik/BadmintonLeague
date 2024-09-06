@@ -5,7 +5,7 @@ const axiosAPI = axios.create({
 });
 
 const axiosReq = axios.create({
-    baseURL: "https://script.google.com/macros/s/AKfycbxpQ3Yb7-0UE5bEXyn-PTTF0cmfKCPJ4sGI5MHdfgYpZeDD9a3bQ-t1jJcCN2G_qWKUWw/exec"
+    baseURL: "https://script.google.com/macros/s/AKfycbyB2o8wqzU54CY_ecQcGCXD47irrqLLBA7r5U0ch6qZr1rVIec8kutmpwh4BUYkit797Q/exec"
 });
 
 export {
