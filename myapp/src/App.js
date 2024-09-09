@@ -17,7 +17,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/league/" element={<League />} />
           <Route exact path="/session/" element={<Session />} />
-          <Route exact path="/session/" element={<SessionCreate />} />
+          <Route exact path="/session/create/" element={<SessionCreate />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
