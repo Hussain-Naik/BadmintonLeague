@@ -12,8 +12,8 @@ const SessionItems = (props) => {
 
 
   const handleClick = () => {
-    setSessionContext(sessionObject.name);
-    setSessionToken(sessionObject.name)
+    setSessionContext(sessionObject);
+    setSessionToken(sessionObject)
     navigate("/session/");
   };
 

@@ -12,11 +12,10 @@ const CreateSession = ({ visible, setVisible }) => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
+    console.log(e.value.toLocaleDateString())
     setDate(e.value);
     setSessionToken(e.value);
     setSessionContext(date);
-    navigate("/session/");
-    setVisible(!visible);
   };
 
   return (
@@ -44,13 +43,18 @@ const CreateSession = ({ visible, setVisible }) => {
                 inline
                 showTime
                 hourFormat="24"
+                locale="en"
                 pt={{ panel: { className: "w-10" } }}
               />
             </div>
             <div className="flex align-items-center gap-2">
               <Button
-                label="Sign-In"
-                onClick={(e) => hide(e)}
+                label="Submit"
+                onClick={() => {
+                  setSessionContext(date)
+                  setVisible(!visible);
+                  navigate("/session/");
+                }}
                 text
                 className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"
               ></Button>
