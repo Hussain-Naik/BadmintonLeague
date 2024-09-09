@@ -53,7 +53,7 @@ const CreateSession = ({ visible, setVisible }) => {
                 onClick={() => {
                   setSessionContext(date)
                   setVisible(!visible);
-                  navigate("/session/");
+                  navigate("/session/create/");
                 }}
                 text
                 className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"
