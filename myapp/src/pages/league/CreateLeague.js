@@ -1,12 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
-import { axiosReq } from "../../api/axiosDefaults";
+import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
+import { useLeagueContext } from "../../context/LeagueContext";
+import { setLeagueToken } from "../../utils/utils";
 
 const CreateLeague = ({ visible, setVisible }) => {
   const [iName, setIName] = useState("");
+  const navigate = useNavigate()
+  
+  const { leagueContext, setLeagueContext } = useLeagueContext();
 
   const handleSubmit = async () => {
     const postObject = {
@@ -15,9 +21,13 @@ const CreateLeague = ({ visible, setVisible }) => {
     const jObj = JSON.stringify(postObject);
     try {
       const post = await axiosReq.post(`/exec?post=${jObj}`);
+      const leagueObject = { title: "League", count: 4, ...post.data.data[0] };
+      console.log(leagueObject)
+      setLeagueContext(leagueObject)
+      setLeagueToken(leagueObject);
+      const { postAPI } = await axiosAPI.post(`/exec?e=SESSIONS&q=${leagueObject.id}&f=league`);
       setVisible(!visible);
-      console.log(post.data.data)
-      // add naviagte to league and setleaguecontent for newly created leagues
+      navigate('league/')
     } catch (error) {}
   };
 

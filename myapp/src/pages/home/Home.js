@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LeagueItems from "../league/LeagueItems";
-import { axiosAPI, axiosReq, sLeague } from "../../api/axiosDefaults";
+import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
 
 const Home = () => {
   const [loaded, setLoaded] = useState(false)
