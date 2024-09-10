@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSessionContext } from "../../context/SessionContext";
 import { Calendar } from "primereact/calendar";
 
@@ -6,6 +6,15 @@ const SessionSettings = (props) => {
   const [players, setPlayers] = useState([]);
   const { sessionContext, setSessionContext } = useSessionContext();
   const [date, setDate] = useState(sessionContext?.date);
+
+  const handleMount = () => {
+    console.log(sessionContext?.date)
+    setDate(sessionContext?.date)
+  };
+
+  useEffect(() => {
+    handleMount();
+  }, []);
 
   return (
     <div className="flex-auto">
