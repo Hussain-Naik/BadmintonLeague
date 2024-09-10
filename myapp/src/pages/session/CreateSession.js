@@ -12,10 +12,8 @@ const CreateSession = ({ visible, setVisible }) => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
-    console.log(e.value.toLocaleDateString())
     setDate(e.value);
-    setSessionToken(e.value);
-    setSessionContext(date);
+    console.log(date)
   };
 
   return (
@@ -51,7 +49,16 @@ const CreateSession = ({ visible, setVisible }) => {
               <Button
                 label="Submit"
                 onClick={() => {
-                  setSessionContext(date)
+                  setSessionContext({
+                    ...sessionContext,
+                    name: `${date.toLocaleDateString()} ${date.toLocaleTimeString().slice(0, 5)}:00`,
+                    date: date
+                  });
+                  setSessionToken({
+                    ...sessionContext,
+                    name: `${date.toLocaleDateString()} ${date.toLocaleTimeString().slice(0, 5)}:00`,
+                    date: date
+                  });
                   setVisible(!visible);
                   navigate("/session/create/");
                 }}

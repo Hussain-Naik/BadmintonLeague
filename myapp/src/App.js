@@ -6,7 +6,7 @@ import NotFound from './components/NotFound';
 import Home from './pages/home/Home';
 import League from './pages/league/League';
 import Session from './pages/session/Session';
-import SessionCreate from './pages/session/SessionCreate';
+import SessionSettings from './pages/session/SessionSettings';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/league/" element={<League />} />
           <Route exact path="/session/" element={<Session />} />
-          <Route exact path="/session/create/" element={<SessionCreate />} />
+          <Route exact path="/session/create/" element={<SessionSettings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
