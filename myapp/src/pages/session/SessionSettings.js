@@ -11,7 +11,7 @@ const SessionSettings = (props) => {
   const [value, setValue] = useState([]);
   const { sessionContext, setSessionContext } = useSessionContext();
   const [date, setDate] = useState(sessionContext?.date);
-  const [selectedCities, setSelectedCities] = useState(null);
+  const [selectedCities, setSelectedCities] = useState([]);
   const cities = [
     { name: "New York", code: "NY" },
     { name: "Rome", code: "RM" },
@@ -29,8 +29,24 @@ const SessionSettings = (props) => {
     );
   };
 
+  const addNewPlayer = (e) => {
+    setSelectedCities([...selectedCities, { name: e.value , code: 0}]);
+  };
+
+  const removeNewPlayer = (e) => {
+    const newPeople = selectedCities.filter((person) => person.name !== e.value);
+    setSelectedCities(newPeople);
+  };
+
+  const updateNewPlayer = (e) => {
+    setSelectedCities(e.value)
+    const newPeople = e.value.filter((person) => person.code === 0);
+    const chipArray = newPeople.map(
+      (item) => item.name)
+    setValue(chipArray);
+  }
+
   const handleMount = () => {
-    console.log(sessionContext?.date);
     setDate(sessionContext?.date);
   };
 
@@ -59,7 +75,7 @@ const SessionSettings = (props) => {
       <ListBox
         multiple
         value={selectedCities}
-        onChange={(e) => setSelectedCities(e.value)}
+        onChange={(e) => updateNewPlayer(e)}
         options={selectedCities}
         optionLabel="name"
         itemTemplate={itemTemplate}
@@ -75,25 +91,15 @@ const SessionSettings = (props) => {
         maxSelectedLabels={3}
         className="w-full"
       />
+      {/* onAdd={(e) =>} */}
       <Chips
         value={value}
         onChange={(e) => setValue(e.value)}
-        separator=","
+        onAdd={(e) => addNewPlayer(e)}
+        onRemove={(e) => removeNewPlayer(e)}
         className="w-full"
-        pt={{container: {className:"w-full"}}}
+        pt={{ container: { className: "w-full" } }}
       />
-      {/* <div className="p-inputgroup flex-1">
-        <InputText
-          value={input}
-          onChange={(e) => setInput(e.value)}
-          label="Name"
-          name="name"
-          placeholder="New Player"
-          className="w-full"
-        />
-        setSelectedCities([...selectedCities, {name: input, code: 1}])
-        <Button icon="pi pi-user-plus" onClick={(e) => {console.log(input);}} />
-      </div> */}
       <Button
         label="Cancel"
         onClick={(e) => console.log(value)}
