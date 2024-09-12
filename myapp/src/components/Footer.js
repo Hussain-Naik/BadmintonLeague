@@ -52,7 +52,7 @@ const Footer = () => {
       >
         <i className="pi pi-home text-2xl"></i>
       </button>
-      {location.pathname !== "/session/" ? buttons : null}
+      {location.pathname.includes("/session/") ? null : buttons}
     </div>
   );
 

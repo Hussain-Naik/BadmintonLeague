@@ -5,13 +5,20 @@ import { MultiSelect } from "primereact/multiselect";
 import { ListBox } from "primereact/listbox";
 import { Chips } from "primereact/chips";
 import { Button } from "primereact/button";
+import { ToggleButton } from "primereact/togglebutton";
 
 const SessionSettings = (props) => {
   const [players, setPlayers] = useState([]);
   const [value, setValue] = useState([]);
+  const [minReq, setMinReq] = useState(2);
+  const [playerType, setPlayerType] = useState("DOUBLES");
+  const [playerTypeChecked, setPlayerTypeChecked] = useState(false);
+  const [gameType, setGameType] = useState("ROUND ROBIN");
+  const [gameTypeChecked, setGameTypeChecked] = useState(false);
   const { sessionContext, setSessionContext } = useSessionContext();
   const [date, setDate] = useState(sessionContext?.date);
-  const [selectedCities, setSelectedCities] = useState([]);
+  const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const cities = [
     { name: "New York", code: "NY" },
     { name: "Rome", code: "RM" },
@@ -30,21 +37,22 @@ const SessionSettings = (props) => {
   };
 
   const addNewPlayer = (e) => {
-    setSelectedCities([...selectedCities, { name: e.value , code: 0}]);
+    setSelectedPlayers([...selectedPlayers, { name: e.value, code: 0 }]);
   };
 
   const removeNewPlayer = (e) => {
-    const newPeople = selectedCities.filter((person) => person.name !== e.value);
-    setSelectedCities(newPeople);
+    const newPeople = selectedPlayers.filter(
+      (person) => person.name !== e.value
+    );
+    setSelectedPlayers(newPeople);
   };
 
   const updateNewPlayer = (e) => {
-    setSelectedCities(e.value)
+    setSelectedPlayers(e.value);
     const newPeople = e.value.filter((person) => person.code === 0);
-    const chipArray = newPeople.map(
-      (item) => item.name)
+    const chipArray = newPeople.map((item) => item.name);
     setValue(chipArray);
-  }
+  };
 
   const handleMount = () => {
     setDate(sessionContext?.date);
@@ -54,9 +62,13 @@ const SessionSettings = (props) => {
     handleMount();
   }, []);
 
+  useEffect(() => {
+    setReqMet(selectedPlayers.length >= minReq);
+  }, [selectedPlayers]);
+
   return (
     <div className="flex-auto">
-      <label htmlFor="buttondisplay" className="font-bold block mb-2">
+      <label htmlFor="calendar" className="font-bold block mb-2">
         Session Date/Time
       </label>
 
@@ -72,26 +84,51 @@ const SessionSettings = (props) => {
         pt={{ panel: { className: "w-12" } }}
         className="w-12"
       />
+      <label htmlFor="playerList" className="font-bold block mb-2">
+        Player List
+      </label>
       <ListBox
         multiple
-        value={selectedCities}
+        value={selectedPlayers}
         onChange={(e) => updateNewPlayer(e)}
-        options={selectedCities}
+        options={selectedPlayers}
         optionLabel="name"
         itemTemplate={itemTemplate}
         className="w-full"
       />
-
+      <ToggleButton
+        onLabel="Singles"
+        offLabel="Doubles"
+        onIcon="pi pi-user"
+        offIcon="pi pi-users"
+        checked={playerTypeChecked}
+        onChange={(e) => setPlayerTypeChecked(e.value)}
+        className="w-9rem"
+      />
+      <ToggleButton
+        onLabel="Tournament"
+        offLabel="Round Robin"
+        onIcon="pi pi-trophy"
+        offIcon="pi pi-bars"
+        checked={gameTypeChecked}
+        onChange={(e) => setGameTypeChecked(e.value)}
+        className="w-9rem"
+      />
+      <label htmlFor="playerSelection" className="font-bold block mb-2">
+        Existing Players
+      </label>
       <MultiSelect
-        value={selectedCities}
-        onChange={(e) => setSelectedCities(e.value)}
+        value={selectedPlayers}
+        onChange={(e) => setSelectedPlayers(e.value)}
         options={cities}
         optionLabel="name"
         placeholder="Select Cities"
         maxSelectedLabels={3}
         className="w-full"
       />
-      {/* onAdd={(e) =>} */}
+      <label htmlFor="newPlayers" className="font-bold block mb-2">
+        Add New Player
+      </label>
       <Chips
         value={value}
         onChange={(e) => setValue(e.value)}
