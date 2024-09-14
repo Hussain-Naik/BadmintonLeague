@@ -19,6 +19,7 @@ const SessionSettings = (props) => {
   const { sessionContext, setSessionContext } = useSessionContext();
   const [date, setDate] = useState(sessionContext?.date);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [ready, setReady] = useState(false);
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const emptyList = [{ name: "No Players Selected", code: "NY" }];
   const cities = [
@@ -34,7 +35,7 @@ const SessionSettings = (props) => {
       <div className="flex justify-content-between align-items-center">
         <div>{option.name}</div>
         <div className="flex justify-content-between align-items-center gap-3">
-          <div>{option.code}</div>
+          <div>{option.seed}</div>
           <i className="pi pi-user-minus"></i>
         </div>
       </div>
@@ -42,7 +43,10 @@ const SessionSettings = (props) => {
   };
 
   const addNewPlayer = (e) => {
-    setSelectedPlayers([...selectedPlayers, { name: e.value, code: 0 }]);
+    setSelectedPlayers([
+      ...selectedPlayers,
+      { name: e.value, code: selectedPlayers.length + 1 },
+    ]);
   };
 
   const removeNewPlayer = (e) => {
@@ -166,8 +170,16 @@ const SessionSettings = (props) => {
           pt={{ list: { className: "p-0" } }}
         />
       )}
-      <div className="mt-2 w-12 flex justify-content-center">
-        {reqMet ? (
+      <div className="mt-2 w-12 flex flex-column justify-content-center">
+        <Button
+          label="Assign Player Numbers"
+          severity="secondary"
+          text
+          raised
+          className="hover:bg-gray-600"
+          onClick={() => {setReady(true)}}
+        />
+        {reqMet && ready ? (
           <Button
             label="Start Session"
             severity="secondary"
