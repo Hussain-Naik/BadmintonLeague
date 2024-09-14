@@ -20,6 +20,7 @@ const SessionSettings = (props) => {
   const [date, setDate] = useState(sessionContext?.date);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
+  const emptyList = [{ name: "No Players Selected", code: "NY" }];
   const cities = [
     { name: "New York", code: "NY" },
     { name: "Rome", code: "RM" },
@@ -122,19 +123,7 @@ const SessionSettings = (props) => {
         onChange={(e) => setGameTypeChecked(e.value)}
         className="w-6"
       />
-      <label htmlFor="playerList" className="text-xs block mb-2">
-        Player List
-      </label>
-      <ListBox
-        multiple
-        value={selectedPlayers}
-        onChange={(e) => updateNewPlayer(e)}
-        options={selectedPlayers}
-        optionLabel="name"
-        itemTemplate={itemTemplate}
-        className="w-full"
-        pt={{ list: { className: "p-0" } }}
-      />
+
       <FloatLabel className="mt-4 w-full">
         <MultiSelect
           value={selectedPlayers}
@@ -157,6 +146,26 @@ const SessionSettings = (props) => {
         />
         <label htmlFor="new-players">Enter New Players</label>
       </FloatLabel>
+      {selectedPlayers.length > 0 ? (
+        <ListBox
+          multiple
+          value={selectedPlayers}
+          onChange={(e) => updateNewPlayer(e)}
+          options={selectedPlayers}
+          optionLabel="name"
+          itemTemplate={itemTemplate}
+          className="w-full mt-2"
+          pt={{ list: { className: "p-0" } }}
+        />
+      ) : (
+        <ListBox
+          disabled
+          options={emptyList}
+          optionLabel="name"
+          className="w-full mt-2"
+          pt={{ list: { className: "p-0" } }}
+        />
+      )}
       <div className="mt-2 w-12 flex justify-content-center">
         {reqMet ? (
           <Button
