@@ -6,11 +6,12 @@ import { ListBox } from "primereact/listbox";
 import { Chips } from "primereact/chips";
 import { Button } from "primereact/button";
 import { ToggleButton } from "primereact/togglebutton";
+import { FloatLabel } from "primereact/floatlabel";
 
 const SessionSettings = (props) => {
   const [players, setPlayers] = useState([]);
   const [value, setValue] = useState([]);
-  const [minReq, setMinReq] = useState(2);
+  const [minReq, setMinReq] = useState(4);
   const [playerType, setPlayerType] = useState("DOUBLES");
   const [playerTypeChecked, setPlayerTypeChecked] = useState(false);
   const [gameType, setGameType] = useState("ROUND ROBIN");
@@ -31,7 +32,10 @@ const SessionSettings = (props) => {
     return (
       <div className="flex justify-content-between align-items-center">
         <div>{option.name}</div>
-        <i className="pi pi-user-minus"></i>
+        <div className="flex justify-content-between align-items-center gap-3">
+          <div>{option.code}</div>
+          <i className="pi pi-user-minus"></i>
+        </div>
       </div>
     );
   };
@@ -66,6 +70,22 @@ const SessionSettings = (props) => {
     setReqMet(selectedPlayers.length >= minReq);
   }, [selectedPlayers]);
 
+  useEffect(() => {
+    if (gameTypeChecked) {
+      if (playerTypeChecked) {
+        setMinReq(8);
+      } else {
+        setMinReq(16);
+      }
+    } else {
+      if (playerTypeChecked) {
+        setMinReq(2);
+      } else {
+        setMinReq(4);
+      }
+    }
+  }, [gameTypeChecked, playerTypeChecked]);
+
   return (
     <div className="flex-auto">
       <label htmlFor="calendar" className="font-bold block mb-2">
@@ -82,9 +102,27 @@ const SessionSettings = (props) => {
         locale="en"
         icon={() => <i className="pi pi-pencil" />}
         pt={{ panel: { className: "w-12" } }}
-        className="w-12"
+        className="w-12 mb-2"
       />
-      <label htmlFor="playerList" className="font-bold block mb-2">
+      <ToggleButton
+        onLabel="Singles"
+        offLabel="Doubles"
+        onIcon="pi pi-user"
+        offIcon="pi pi-users"
+        checked={playerTypeChecked}
+        onChange={(e) => setPlayerTypeChecked(e.value)}
+        className="w-6"
+      />
+      <ToggleButton
+        onLabel="Tournament"
+        offLabel="Round Robin"
+        onIcon="pi pi-trophy"
+        offIcon="pi pi-bars"
+        checked={gameTypeChecked}
+        onChange={(e) => setGameTypeChecked(e.value)}
+        className="w-6"
+      />
+      <label htmlFor="playerList" className="text-xs block mb-2">
         Player List
       </label>
       <ListBox
@@ -95,54 +133,50 @@ const SessionSettings = (props) => {
         optionLabel="name"
         itemTemplate={itemTemplate}
         className="w-full"
+        pt={{ list: { className: "p-0" } }}
       />
-      <ToggleButton
-        onLabel="Singles"
-        offLabel="Doubles"
-        onIcon="pi pi-user"
-        offIcon="pi pi-users"
-        checked={playerTypeChecked}
-        onChange={(e) => setPlayerTypeChecked(e.value)}
-        className="w-9rem"
-      />
-      <ToggleButton
-        onLabel="Tournament"
-        offLabel="Round Robin"
-        onIcon="pi pi-trophy"
-        offIcon="pi pi-bars"
-        checked={gameTypeChecked}
-        onChange={(e) => setGameTypeChecked(e.value)}
-        className="w-9rem"
-      />
-      <label htmlFor="playerSelection" className="font-bold block mb-2">
-        Existing Players
-      </label>
-      <MultiSelect
-        value={selectedPlayers}
-        onChange={(e) => setSelectedPlayers(e.value)}
-        options={cities}
-        optionLabel="name"
-        placeholder="Select Cities"
-        maxSelectedLabels={3}
-        className="w-full"
-      />
-      <label htmlFor="newPlayers" className="font-bold block mb-2">
-        Add New Player
-      </label>
-      <Chips
-        value={value}
-        onChange={(e) => setValue(e.value)}
-        onAdd={(e) => addNewPlayer(e)}
-        onRemove={(e) => removeNewPlayer(e)}
-        className="w-full"
-        pt={{ container: { className: "w-full" } }}
-      />
-      <Button
-        label="Cancel"
-        onClick={(e) => console.log(value)}
-        text
-        className="p-3 w-full text-primary-50 border-1 border-white-alpha-30 hover:bg-white-alpha-10"
-      ></Button>
+      <FloatLabel className="mt-4 w-full">
+        <MultiSelect
+          value={selectedPlayers}
+          onChange={(e) => setSelectedPlayers(e.value)}
+          options={cities}
+          optionLabel="name"
+          maxSelectedLabels={3}
+          className="w-full"
+        />
+        <label htmlFor="ms-players">Existing Players</label>
+      </FloatLabel>
+      <FloatLabel className="mt-4 w-full">
+        <Chips
+          value={value}
+          onChange={(e) => setValue(e.value)}
+          onAdd={(e) => addNewPlayer(e)}
+          onRemove={(e) => removeNewPlayer(e)}
+          className="w-full"
+          pt={{ container: { className: "w-full" } }}
+        />
+        <label htmlFor="new-players">Enter New Players</label>
+      </FloatLabel>
+      <div className="mt-2 w-12 flex justify-content-center">
+        {reqMet ? (
+          <Button
+            label="Start Session"
+            severity="secondary"
+            text
+            raised
+            className="hover:bg-gray-600"
+          />
+        ) : (
+          <Button
+            label={`${selectedPlayers.length} / ${minReq}`}
+            severity="secondary"
+            disabled
+            text
+            raised
+            className="hover:bg-gray-600"
+          />
+        )}
+      </div>
     </div>
   );
 };
