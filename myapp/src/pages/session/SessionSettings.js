@@ -23,20 +23,25 @@ const SessionSettings = (props) => {
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const emptyList = [{ name: "No Players Selected", code: "NY" }];
   const cities = [
-    { name: "New York", code: "NY" },
-    { name: "Rome", code: "RM" },
-    { name: "London", code: "LDN" },
-    { name: "Istanbul", code: "IST" },
-    { name: "Paris", code: "PRS" },
+    { name: "New York", code: "NY", seed: 0 },
+    { name: "Rome", code: "RM", seed: 0 },
+    { name: "London", code: "LDN", seed: 0 },
+    { name: "Istanbul", code: "IST", seed: 0 },
+    { name: "Paris", code: "PRS", seed: 0 },
   ];
 
   const itemTemplate = (option) => {
     return (
       <div className="flex justify-content-between align-items-center">
-        <div>{option.name}</div>
         <div className="flex justify-content-between align-items-center gap-3">
-          <div>{option.seed}</div>
-          <i className="pi pi-user-minus"></i>
+          <div onClick={() => updateSeed(option)}>{option.seed}</div>
+          <div>{option.name}</div>
+        </div>
+        <div>
+          <i
+            className="pi pi-user-minus"
+            onClick={() => updatePlayerList(option)}
+          ></i>
         </div>
       </div>
     );
@@ -45,8 +50,43 @@ const SessionSettings = (props) => {
   const addNewPlayer = (e) => {
     setSelectedPlayers([
       ...selectedPlayers,
-      { name: e.value, code: selectedPlayers.length + 1 },
+      { name: e.value, code: 0, seed: selectedPlayers.length + 1 },
     ]);
+  };
+
+  const updateSeed = (option) => {
+    const updatedList = selectedPlayers.map((person) => {
+      if (person.name !== option.name) {
+        // No change
+        return person;
+      } else {
+        if (person.seed + 1 > selectedPlayers.length) {
+          return {
+            ...person,
+            seed: 1,
+          };
+        } else {
+          return {
+            ...person,
+            seed: person.seed + 1,
+          };
+        }
+      }
+    });
+    setSelectedPlayers(updatedList);
+    const newPeople = updatedList.filter((person) => person.code === 0);
+    const chipArray = newPeople.map((item) => item.name);
+    setValue(chipArray);
+  };
+
+  const updatePlayerList = (option) => {
+    const updatedList = selectedPlayers.filter(
+      (person) => person.name !== option.name
+    );
+    setSelectedPlayers(updatedList);
+    const newPeople = updatedList.filter((person) => person.code === 0);
+    const chipArray = newPeople.map((item) => item.name);
+    setValue(chipArray);
   };
 
   const removeNewPlayer = (e) => {
@@ -54,13 +94,6 @@ const SessionSettings = (props) => {
       (person) => person.name !== e.value
     );
     setSelectedPlayers(newPeople);
-  };
-
-  const updateNewPlayer = (e) => {
-    setSelectedPlayers(e.value);
-    const newPeople = e.value.filter((person) => person.code === 0);
-    const chipArray = newPeople.map((item) => item.name);
-    setValue(chipArray);
   };
 
   const handleMount = () => {
@@ -73,6 +106,7 @@ const SessionSettings = (props) => {
 
   useEffect(() => {
     setReqMet(selectedPlayers.length >= minReq);
+    setReady(false);
   }, [selectedPlayers]);
 
   useEffect(() => {
@@ -154,7 +188,7 @@ const SessionSettings = (props) => {
         <ListBox
           multiple
           value={selectedPlayers}
-          onChange={(e) => updateNewPlayer(e)}
+          onChange={() => null}
           options={selectedPlayers}
           optionLabel="name"
           itemTemplate={itemTemplate}
@@ -171,14 +205,19 @@ const SessionSettings = (props) => {
         />
       )}
       <div className="mt-2 w-12 flex flex-column justify-content-center">
-        <Button
-          label="Assign Player Numbers"
-          severity="secondary"
-          text
-          raised
-          className="hover:bg-gray-600"
-          onClick={() => {setReady(true)}}
-        />
+        {selectedPlayers.length > 0 ? (
+          <Button
+            label="Assign Player Numbers"
+            severity="secondary"
+            text
+            raised
+            className="hover:bg-gray-600"
+            onClick={() => {
+              setReady(true);
+            }}
+          />
+        ) : null}
+
         {reqMet && ready ? (
           <Button
             label="Start Session"
