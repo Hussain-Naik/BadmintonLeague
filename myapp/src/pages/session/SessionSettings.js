@@ -19,16 +19,10 @@ const SessionSettings = (props) => {
   const { sessionContext, setSessionContext } = useSessionContext();
   const [date, setDate] = useState(sessionContext?.date);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [seedArray, setSeedArray] = useState([]);
   const [ready, setReady] = useState(false);
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const emptyList = [{ name: "No Players Selected", code: "NY" }];
-  const cities = [
-    { name: "New York", code: "NY", seed: 0 },
-    { name: "Rome", code: "RM", seed: 0 },
-    { name: "London", code: "LDN", seed: 0 },
-    { name: "Istanbul", code: "IST", seed: 0 },
-    { name: "Paris", code: "PRS", seed: 0 },
-  ];
 
   const itemTemplate = (option) => {
     return (
@@ -50,14 +44,32 @@ const SessionSettings = (props) => {
   const addNewPlayer = (e) => {
     setSelectedPlayers([
       ...selectedPlayers,
-      { name: e.value, code: 0, seed: selectedPlayers.length + 1 },
+      { name: e.value, code: null, seed: selectedPlayers.length + 1 },
+    ]);
+  };
+
+  const addPlayer = (e) => {
+    const addedPlayer = e.value.filter((person) => person.seed === 0);
+    const updatedList = players.map((person) => {
+      if (person.name !== addedPlayer[0].name) {
+        return person;
+      } else {
+        return {
+          ...person,
+          seed: selectedPlayers.length + 1,
+        };
+      }
+    });
+    setPlayers(updatedList);
+    setSelectedPlayers([
+      ...selectedPlayers,
+      { ...addedPlayer[0], seed: selectedPlayers.length + 1 },
     ]);
   };
 
   const updateSeed = (option) => {
     const updatedList = selectedPlayers.map((person) => {
       if (person.name !== option.name) {
-        // No change
         return person;
       } else {
         if (person.seed + 1 > selectedPlayers.length) {
@@ -74,9 +86,6 @@ const SessionSettings = (props) => {
       }
     });
     setSelectedPlayers(updatedList);
-    const newPeople = updatedList.filter((person) => person.code === 0);
-    const chipArray = newPeople.map((item) => item.name);
-    setValue(chipArray);
   };
 
   const updatePlayerList = (option) => {
@@ -84,7 +93,7 @@ const SessionSettings = (props) => {
       (person) => person.name !== option.name
     );
     setSelectedPlayers(updatedList);
-    const newPeople = updatedList.filter((person) => person.code === 0);
+    const newPeople = updatedList.filter((person) => person.code === null);
     const chipArray = newPeople.map((item) => item.name);
     setValue(chipArray);
   };
@@ -96,8 +105,22 @@ const SessionSettings = (props) => {
     setSelectedPlayers(newPeople);
   };
 
+  const autoSeed = () => {
+    const autoAssign = selectedPlayers.map((el, index) => {
+      return { ...el, seed: index + 1 };
+    });
+    setSelectedPlayers(autoAssign);
+  };
+
   const handleMount = () => {
     setDate(sessionContext?.date);
+    setPlayers([
+      { name: "New York", code: "NY", seed: 0 },
+      { name: "Rome", code: "RM", seed: 0 },
+      { name: "London", code: "LDN", seed: 0 },
+      { name: "Istanbul", code: "IST", seed: 0 },
+      { name: "Paris", code: "PRS", seed: 0 },
+    ]);
   };
 
   useEffect(() => {
@@ -107,7 +130,21 @@ const SessionSettings = (props) => {
   useEffect(() => {
     setReqMet(selectedPlayers.length >= minReq);
     setReady(false);
+    const array = selectedPlayers.map((item) => item.seed);
+    setSeedArray(array);
   }, [selectedPlayers]);
+
+  useEffect(() => {
+    if (new Set(seedArray).size !== seedArray.length) {
+      setReady(false);
+    } else {
+      if (seedArray.includes(0)) {
+        setReady(false);
+      } else {
+        setReady(true);
+      }
+    }
+  }, [seedArray]);
 
   useEffect(() => {
     if (gameTypeChecked) {
@@ -161,12 +198,11 @@ const SessionSettings = (props) => {
         onChange={(e) => setGameTypeChecked(e.value)}
         className="w-6"
       />
-
       <FloatLabel className="mt-4 w-full">
         <MultiSelect
           value={selectedPlayers}
-          onChange={(e) => setSelectedPlayers(e.value)}
-          options={cities}
+          onChange={(e) => addPlayer(e)}
+          options={players}
           optionLabel="name"
           maxSelectedLabels={3}
           className="w-full"
@@ -212,9 +248,7 @@ const SessionSettings = (props) => {
             text
             raised
             className="hover:bg-gray-600"
-            onClick={() => {
-              setReady(true);
-            }}
+            onClick={autoSeed}
           />
         ) : null}
 
