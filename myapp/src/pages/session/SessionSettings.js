@@ -19,7 +19,7 @@ const SessionSettings = (props) => {
   const { sessionContext, setSessionContext } = useSessionContext();
   const [date, setDate] = useState(sessionContext?.date);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
-  const [seedArray, setSeedArray] = useState([]);
+  const [seed, setSeed] = useState({});
   const [ready, setReady] = useState(false);
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const emptyList = [{ name: "No Players Selected", code: "NY" }];
@@ -28,7 +28,9 @@ const SessionSettings = (props) => {
     return (
       <div className="flex justify-content-between align-items-center">
         <div className="flex justify-content-between align-items-center gap-3">
-          <div onClick={() => updateSeed(option)}>{option.seed}</div>
+          <div onClick={() => updateSeed(option)}>
+            {seed[option.name] === undefined ? 0 : seed[option.name]}
+          </div>
           <div>{option.name}</div>
         </div>
         <div>
@@ -46,74 +48,62 @@ const SessionSettings = (props) => {
       ...selectedPlayers,
       { name: e.value, code: null, seed: selectedPlayers.length + 1 },
     ]);
+    setSeed({ ...seed, [e.value]: selectedPlayers.length + 1 });
   };
 
   const addPlayer = (e) => {
-    // const addedPlayer = e.value.filter((person) => person.seed === 0);
-    // const updatedList = players.map((person) => {
-    //   if (person.name !== addedPlayer[0].name) {
-    //     return person;
-    //   } else {
-    //     return {
-    //       ...person,
-    //       seed: selectedPlayers.length + 1,
-    //     };
-    //   }
-    // });
-    // setPlayers(updatedList);
-    // setSelectedPlayers([
-    //   ...selectedPlayers,
-    //   { ...addedPlayer[0], seed: selectedPlayers.length + 1 },
-    // ]);
-    // console.log(updatedList)
-    setSelectedPlayers(e.value)
-    console.log(e.value)
+    if (e.value[selectedPlayers.length] === undefined) {
+      const removed = selectedPlayers.filter(
+        (person) => !e.value.includes(person) && person.code !== null
+      );
+      removed.map((person) => {
+        setSelectedPlayers((prevState) => {
+          return prevState.filter((item) => item !== person);
+        });
+        setSeed((prevState) => {
+          const key = person.name;
+          const { [key]: removeKey, ...newItems } = prevState;
+          return newItems;
+        });
+      });
+    } else {
+      const keys = Object.keys(seed);
+      const added = e.value.filter((person) => !keys.includes(person.name));
+      added.map((person, index) => {
+        setSeed((prevState) => {
+          return {
+            ...prevState,
+            [person.name]: index + selectedPlayers.length + 1,
+          };
+        });
+        setSelectedPlayers((prevState) => {
+          return [...prevState, person];
+        });
+      });
+    }
   };
 
   const updateSeed = (option) => {
-    const updatedList = selectedPlayers.map((person) => {
-      if (person.name !== option.name) {
-        return person;
-      } else {
-        if (person.seed + 1 > selectedPlayers.length) {
-          return {
-            ...person,
-            seed: 1,
-          };
-        } else {
-          return {
-            ...person,
-            seed: person.seed + 1,
-          };
-        }
-      }
-    });
-    setSelectedPlayers(updatedList);
+    if (seed[option.name] + 1 > selectedPlayers.length) {
+      setSeed({ ...seed, [option.name]: 1 });
+    } else {
+      setSeed({ ...seed, [option.name]: seed[option.name] + 1 });
+    }
   };
 
   const updatePlayerList = (option) => {
     const updatedList = selectedPlayers.filter(
       (person) => person.name !== option.name
     );
-    const removedPlayer = selectedPlayers.filter(
-      (person) => person.name === option.name
-    );
     setSelectedPlayers(updatedList);
     const newPeople = updatedList.filter((person) => person.code === null);
     const chipArray = newPeople.map((item) => item.name);
     setValue(chipArray);
-    const updatedPList = players.map((person) => {
-      if (person.name !== removedPlayer[0].name) {
-        return person;
-      } else {
-        return {
-          ...person,
-          seed: 0,
-        };
-      }
+    const key = option.name;
+    setSeed((prevState) => {
+      const { [key]: removeKey, ...newItems } = prevState;
+      return newItems;
     });
-    setPlayers(updatedPList);
-    console.log(updatedPList)
   };
 
   const removeNewPlayer = (e) => {
@@ -121,13 +111,20 @@ const SessionSettings = (props) => {
       (person) => person.name !== e.value
     );
     setSelectedPlayers(newPeople);
+    const key = e.value;
+    setSeed((prevState) => {
+      const { [key]: removeKey, ...newItems } = prevState;
+      return newItems;
+    });
   };
 
   const autoSeed = () => {
-    const autoAssign = selectedPlayers.map((el, index) => {
-      return { ...el, seed: index + 1 };
-    });
-    setSelectedPlayers(autoAssign);
+    const keys = Object.keys(seed);
+    keys.map((key, index) =>
+      setSeed((prevState) => {
+        return { ...prevState, [key]: index + 1 };
+      })
+    );
   };
 
   const handleMount = () => {
@@ -148,11 +145,10 @@ const SessionSettings = (props) => {
   useEffect(() => {
     setReqMet(selectedPlayers.length >= minReq);
     setReady(false);
-    const array = selectedPlayers.map((item) => item.seed);
-    setSeedArray(array);
   }, [selectedPlayers]);
 
   useEffect(() => {
+    const seedArray = Object.values(seed)
     if (new Set(seedArray).size !== seedArray.length) {
       setReady(false);
     } else {
@@ -162,7 +158,7 @@ const SessionSettings = (props) => {
         setReady(true);
       }
     }
-  }, [seedArray]);
+  }, [seed]);
 
   useEffect(() => {
     if (gameTypeChecked) {
@@ -187,6 +183,7 @@ const SessionSettings = (props) => {
       </label>
 
       <Calendar
+        id="calendar"
         value={date}
         onChange={(e) => setDate(e.value)}
         dateFormat="dd/mm/yy"
@@ -218,17 +215,20 @@ const SessionSettings = (props) => {
       />
       <FloatLabel className="mt-4 w-full">
         <MultiSelect
+          id="ms-players"
           value={selectedPlayers}
           onChange={(e) => addPlayer(e)}
           options={players}
           optionLabel="name"
           maxSelectedLabels={3}
           className="w-full"
+          pt={{ headerCheckbox: { className: "hidden" } }}
         />
         <label htmlFor="ms-players">Existing Players</label>
       </FloatLabel>
       <FloatLabel className="mt-4 w-full">
         <Chips
+          id="new-players"
           value={value}
           onChange={(e) => setValue(e.value)}
           onAdd={(e) => addNewPlayer(e)}
@@ -288,6 +288,16 @@ const SessionSettings = (props) => {
             className="hover:bg-gray-600"
           />
         )}
+        <Button
+          label="test"
+          severity="secondary"
+          text
+          raised
+          className="hover:bg-gray-600"
+          onClick={() => {
+            console.log(seed);
+          }}
+        />
       </div>
     </div>
   );
