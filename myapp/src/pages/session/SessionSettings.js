@@ -65,6 +65,7 @@ const SessionSettings = (props) => {
       ...selectedPlayers,
       { ...addedPlayer[0], seed: selectedPlayers.length + 1 },
     ]);
+    console.log(updatedList)
   };
 
   const updateSeed = (option) => {
@@ -92,10 +93,25 @@ const SessionSettings = (props) => {
     const updatedList = selectedPlayers.filter(
       (person) => person.name !== option.name
     );
+    const removedPlayer = selectedPlayers.filter(
+      (person) => person.name === option.name
+    );
     setSelectedPlayers(updatedList);
     const newPeople = updatedList.filter((person) => person.code === null);
     const chipArray = newPeople.map((item) => item.name);
     setValue(chipArray);
+    const updatedPList = players.map((person) => {
+      if (person.name !== removedPlayer[0].name) {
+        return person;
+      } else {
+        return {
+          ...person,
+          seed: 0,
+        };
+      }
+    });
+    setPlayers(updatedPList);
+    console.log(updatedPList)
   };
 
   const removeNewPlayer = (e) => {
