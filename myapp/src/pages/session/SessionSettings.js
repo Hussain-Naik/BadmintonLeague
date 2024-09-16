@@ -49,23 +49,25 @@ const SessionSettings = (props) => {
   };
 
   const addPlayer = (e) => {
-    const addedPlayer = e.value.filter((person) => person.seed === 0);
-    const updatedList = players.map((person) => {
-      if (person.name !== addedPlayer[0].name) {
-        return person;
-      } else {
-        return {
-          ...person,
-          seed: selectedPlayers.length + 1,
-        };
-      }
-    });
-    setPlayers(updatedList);
-    setSelectedPlayers([
-      ...selectedPlayers,
-      { ...addedPlayer[0], seed: selectedPlayers.length + 1 },
-    ]);
-    console.log(updatedList)
+    // const addedPlayer = e.value.filter((person) => person.seed === 0);
+    // const updatedList = players.map((person) => {
+    //   if (person.name !== addedPlayer[0].name) {
+    //     return person;
+    //   } else {
+    //     return {
+    //       ...person,
+    //       seed: selectedPlayers.length + 1,
+    //     };
+    //   }
+    // });
+    // setPlayers(updatedList);
+    // setSelectedPlayers([
+    //   ...selectedPlayers,
+    //   { ...addedPlayer[0], seed: selectedPlayers.length + 1 },
+    // ]);
+    // console.log(updatedList)
+    setSelectedPlayers(e.value)
+    console.log(e.value)
   };
 
   const updateSeed = (option) => {
