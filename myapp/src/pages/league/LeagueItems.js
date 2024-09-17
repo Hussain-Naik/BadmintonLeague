@@ -13,7 +13,6 @@ const LeagueItems = (props) => {
 
   const handleClick = async () => {
     try {
-      const { post } = await axiosAPI.post(`/exec?e=SESSIONS&q=${id}&f=league`);
       setLeagueContext(leagueObject);
       setLeagueToken(leagueObject);
       navigate("league/");

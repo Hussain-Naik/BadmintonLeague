@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import SessionItems from "../session/SessionItems";
 import Leaderboard from "./Leaderboard";
-import { axiosReq } from "../../api/axiosDefaults";
+import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
 
 const League = () => {
   const [loaded, setLoaded] = useState(false)
   const [sessionItems, setSessionItems] = useState([])
+  const league = JSON.parse(localStorage.getItem("leagueToken"));
 
   const handleMount = async () => {
     try {
+      const { post } = await axiosAPI.post(`/exec?e=SESSIONS&q=${league.id}&f=league`);
       const { data } = await axiosReq.get();
       setSessionItems(data.data)
       setLoaded(true)
-      console.log(data.data)
     } catch (error) {}
   };
 

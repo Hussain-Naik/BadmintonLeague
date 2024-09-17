@@ -8,19 +8,17 @@ import { Button } from "primereact/button";
 import { ToggleButton } from "primereact/togglebutton";
 import { FloatLabel } from "primereact/floatlabel";
 import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
-import { useLeagueContext } from "../../context/LeagueContext";
-import { reloadLeague } from "../../utils/utils";
+import { useNavigate } from "react-router-dom";
+import { setSessionToken } from "../../utils/utils";
 
 const SessionSettings = (props) => {
   const [players, setPlayers] = useState([]);
   const [value, setValue] = useState([]);
   const [minReq, setMinReq] = useState(4);
-  const [playerType, setPlayerType] = useState("DOUBLES");
   const [playerTypeChecked, setPlayerTypeChecked] = useState(false);
-  const [gameType, setGameType] = useState("ROUND ROBIN");
   const [gameTypeChecked, setGameTypeChecked] = useState(false);
   const { sessionContext, setSessionContext } = useSessionContext();
-  const { leagueContext, setLeagueContext } = useLeagueContext();
+  const league = JSON.parse(localStorage.getItem("leagueToken"));
   const [date, setDate] = useState(sessionContext?.date);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [seed, setSeed] = useState({});
@@ -28,6 +26,7 @@ const SessionSettings = (props) => {
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const emptyList = [{ name: "No Players Selected", code: "NY" }];
   const [loaded, setLoaded] = useState(false);
+  const navigate = useNavigate()
 
   const itemTemplate = (option) => {
     return (
@@ -51,7 +50,7 @@ const SessionSettings = (props) => {
   const addNewPlayer = (e) => {
     setSelectedPlayers([
       ...selectedPlayers,
-      { user: e.value, code: null, seed: selectedPlayers.length + 1 },
+      { id: null, league: league.id, user: e.value },
     ]);
     setSeed({ ...seed, [e.value]: selectedPlayers.length + 1 });
   };
@@ -59,7 +58,7 @@ const SessionSettings = (props) => {
   const addPlayer = (e) => {
     if (e.value[selectedPlayers.length] === undefined) {
       const removed = selectedPlayers.filter(
-        (person) => !e.value.includes(person) && person.code !== null
+        (person) => !e.value.includes(person) && person.id !== null
       );
       removed.map((person) => {
         setSelectedPlayers((prevState) => {
@@ -101,7 +100,7 @@ const SessionSettings = (props) => {
       (person) => person.user !== option.user
     );
     setSelectedPlayers(updatedList);
-    const newPeople = updatedList.filter((person) => person.code === null);
+    const newPeople = updatedList.filter((person) => person.id === null);
     const chipArray = newPeople.map((item) => item.user);
     setValue(chipArray);
     const key = option.user;
@@ -132,18 +131,47 @@ const SessionSettings = (props) => {
     );
   };
 
+  const handleSubmit = async () => {
+    const gType = gameTypeChecked ? "TOURNAMENT" : "ROUND ROBIN";
+    const pType = playerTypeChecked ? "SINGLES" : "DOUBLES";
+    const postObject = {
+      1: {
+        sheetname: "SESSIONS",
+        date: `${date.toLocaleDateString()} ${date.toLocaleTimeString().slice(0, 5)}:00`,
+        league: league.id,
+        player_type: pType,
+        game_type: gType,
+      },
+    };
+    console.log(postObject);
+    const jObj = JSON.stringify(postObject);
+    try {
+      const post = await axiosReq.post(`/exec?post=${jObj}`);
+      const { id, date, player_count, game_type, player_type } = post.data.data[0];
+      const sessionObject = { title: `${player_type} ${game_type}`, name: date, count: player_count, id: id };
+      console.log(sessionObject);
+      setSessionContext(sessionObject);
+      setSessionToken(sessionObject);
+      // const { postAPI } = await axiosAPI.post(
+      //   `/exec?e=SESSIONS&q=${leagueObject.id}&f=league`
+      // );
+      navigate("/session/");
+    } catch (error) {}
+  };
+
   const handleMount = async () => {
+    console.log(sessionContext)
     setDate(sessionContext?.date);
-    const league = JSON.parse(localStorage.getItem('leagueToken'))
-    console.log(league)
     try {
       // const { post } = await axiosAPI.post('/exec?e=LEAGUE')
-      const { post } = await axiosAPI.post(`/exec?e=PARTICIPANTS&q=${league.id}&f=league`);
+      const { post } = await axiosAPI.post(
+        `/exec?e=PARTICIPANTS&q=${league.id}&f=league`
+      );
       const { data } = await axiosReq.get();
-      setLoaded(true)
-      setPlayers(data.data)
+      setLoaded(true);
+      setPlayers(data.data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
 
@@ -294,6 +322,7 @@ const SessionSettings = (props) => {
             text
             raised
             className="hover:bg-gray-600"
+            onClick={() => handleSubmit()}
           />
         ) : (
           <Button
@@ -313,6 +342,7 @@ const SessionSettings = (props) => {
           className="hover:bg-gray-600"
           onClick={() => {
             console.log(seed);
+            console.log(selectedPlayers);
           }}
         />
       </div>
