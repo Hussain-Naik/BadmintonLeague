@@ -6,6 +6,7 @@ import { useSessionContext } from "../../context/SessionContext";
 const Leaderboard = () => {
   const data = [{player: 'Hussain', wins: 2}, {player: 'Tauseef', wins: 1}]
   const { sessionContext, setSessionContext } = useSessionContext();
+  
 
   return (
     <div className="col-12 lg:col-6">

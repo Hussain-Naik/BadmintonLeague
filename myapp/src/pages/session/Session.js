@@ -7,16 +7,24 @@ const Session = () => {
   const session = JSON.parse(localStorage.getItem("leagueSessionToken"));
   const [fixtures, setFixtures] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [Leaderboards, setLeaderboards] = useState([]);
 
   const handleMount = async () => {
     console.log(session);
     try {
-      const { post } = await axiosAPI.post(
+      const { fixtureAPI } = await axiosAPI.post(
         `/exec?e=FIXTURES&q=${session.title}${session.count}&f=fixture_api`
       );
       const { data } = await axiosReq.get();
+      // const { leaderboardAPI } = await axiosAPI.post(
+      //   `/exec?e=PLAYERS&q=${session.id}&f=session`
+      // );
+      // const { scoreboard } = await axiosReq.get();
+      // setLeaderboards(scoreboard.data);
+      // setFixtures(fixture.data);
       setLoaded(true);
-      setFixtures(data.data);
+      console.log(data.data);
+      // console.log(scoreboard.data);
     } catch (err) {
       console.log(err);
     }
