@@ -22,7 +22,6 @@ const CreateLeague = ({ visible, setVisible }) => {
     try {
       const post = await axiosReq.post(`/exec?post=${jObj}`);
       const leagueObject = { title: "League", count: 4, ...post.data.data[0] };
-      console.log(leagueObject)
       setLeagueContext(leagueObject)
       setLeagueToken(leagueObject);
       const { postAPI } = await axiosAPI.post(`/exec?e=SESSIONS&q=${leagueObject.id}&f=league`);

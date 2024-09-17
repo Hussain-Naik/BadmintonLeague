@@ -168,7 +168,6 @@ const SessionSettings = (props) => {
       // const postPlayer = await axiosReq.post(`/exec?post=${playerJSON}`);
       const postParticipants = {}
       if (value.length > 0) {
-        console.log(value)
         value.map((item, index) => {
           postParticipants[index + 1] = {sheetname: 'PARTICIPANTS', user: item, league: league.id}
         });
@@ -180,7 +179,6 @@ const SessionSettings = (props) => {
   };
 
   const handleMount = async () => {
-    console.log(sessionContext);
     setDate(sessionContext?.date);
     try {
       // const { post } = await axiosAPI.post('/exec?e=LEAGUE')
@@ -354,18 +352,6 @@ const SessionSettings = (props) => {
             className="hover:bg-gray-600"
           />
         )}
-        <Button
-          label="test"
-          severity="secondary"
-          text
-          raised
-          className="hover:bg-gray-600"
-          onClick={() => {
-            console.log(seed);
-            console.log(selectedPlayers);
-            console.log(value)
-          }}
-        />
       </div>
     </div>
   );

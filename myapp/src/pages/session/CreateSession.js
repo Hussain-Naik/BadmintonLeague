@@ -13,7 +13,6 @@ const CreateSession = ({ visible, setVisible }) => {
 
   const handleClick = (e) => {
     setDate(e.value);
-    console.log(date)
   };
 
   return (

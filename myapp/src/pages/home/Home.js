@@ -12,7 +12,6 @@ const Home = () => {
       const { data } = await axiosReq.get();
       setLeagueList(data.data)
       setLoaded(true)
-      console.log(data.data)
     } catch (err) {
       console.log(err)
     }
