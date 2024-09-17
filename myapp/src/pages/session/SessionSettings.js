@@ -13,6 +13,7 @@ import { setSessionToken } from "../../utils/utils";
 
 const SessionSettings = (props) => {
   const [players, setPlayers] = useState([]);
+  const [postPlayers, setPostPLayers] = useState({});
   const [value, setValue] = useState([]);
   const [minReq, setMinReq] = useState(4);
   const [playerTypeChecked, setPlayerTypeChecked] = useState(false);
@@ -26,7 +27,7 @@ const SessionSettings = (props) => {
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const emptyList = [{ name: "No Players Selected", code: "NY" }];
   const [loaded, setLoaded] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const itemTemplate = (option) => {
     return (
@@ -137,21 +138,33 @@ const SessionSettings = (props) => {
     const postObject = {
       1: {
         sheetname: "SESSIONS",
-        date: `${date.toLocaleDateString()} ${date.toLocaleTimeString().slice(0, 5)}:00`,
+        date: `${date.toLocaleDateString()} ${date
+          .toLocaleTimeString()
+          .slice(0, 5)}:00`,
         league: league.id,
         player_type: pType,
         game_type: gType,
       },
     };
-    console.log(postObject);
-    const jObj = JSON.stringify(postObject);
+    const sessionJSON = JSON.stringify(postObject);
     try {
-      const post = await axiosReq.post(`/exec?post=${jObj}`);
-      const { id, date, player_count, game_type, player_type } = post.data.data[0];
-      const sessionObject = { title: `${player_type} ${game_type}`, name: date, count: player_count, id: id };
-      console.log(sessionObject);
+      const post = await axiosReq.post(`/exec?post=${sessionJSON}`);
+      const { id, date, player_count, game_type, player_type } =
+        post.data.data[0];
+      const sessionObject = {
+        title: `${player_type} ${game_type}`,
+        name: date,
+        count: player_count,
+        id: id,
+      };
       setSessionContext(sessionObject);
       setSessionToken(sessionObject);
+      const keys = Object.keys(seed);
+      const values = Object.values(seed);
+      keys.map((key, index) => {
+        setPostPLayers({ ...postPlayers, [index + 1]: { sheetname: "test" } });
+        console.log(key);
+      });
       // const { postAPI } = await axiosAPI.post(
       //   `/exec?e=SESSIONS&q=${leagueObject.id}&f=league`
       // );
@@ -160,7 +173,7 @@ const SessionSettings = (props) => {
   };
 
   const handleMount = async () => {
-    console.log(sessionContext)
+    console.log(sessionContext);
     setDate(sessionContext?.date);
     try {
       // const { post } = await axiosAPI.post('/exec?e=LEAGUE')
@@ -343,6 +356,16 @@ const SessionSettings = (props) => {
           onClick={() => {
             console.log(seed);
             console.log(selectedPlayers);
+            const keys = Object.keys(seed);
+            const values = Object.values(seed);
+            const test = {}
+            keys.map((key, index) => {
+              test[index + 1] = {sheetname: 'PLAYERS', player: key, seed: values[index]} 
+              setPostPLayers((prevState) => {
+                return { ...prevState, [index + 1]: {sheetname: 'PLAYERS', player: key, seed: values[index]} };
+              });
+            });
+            console.log(test);
           }}
         />
       </div>
