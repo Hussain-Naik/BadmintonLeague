@@ -7,6 +7,9 @@ import { Chips } from "primereact/chips";
 import { Button } from "primereact/button";
 import { ToggleButton } from "primereact/togglebutton";
 import { FloatLabel } from "primereact/floatlabel";
+import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
+import { useLeagueContext } from "../../context/LeagueContext";
+import { reloadLeague } from "../../utils/utils";
 
 const SessionSettings = (props) => {
   const [players, setPlayers] = useState([]);
@@ -17,21 +20,23 @@ const SessionSettings = (props) => {
   const [gameType, setGameType] = useState("ROUND ROBIN");
   const [gameTypeChecked, setGameTypeChecked] = useState(false);
   const { sessionContext, setSessionContext } = useSessionContext();
+  const { leagueContext, setLeagueContext } = useLeagueContext();
   const [date, setDate] = useState(sessionContext?.date);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [seed, setSeed] = useState({});
   const [ready, setReady] = useState(false);
   const [reqMet, setReqMet] = useState(selectedPlayers.length >= minReq);
   const emptyList = [{ name: "No Players Selected", code: "NY" }];
+  const [loaded, setLoaded] = useState(false);
 
   const itemTemplate = (option) => {
     return (
       <div className="flex justify-content-between align-items-center">
         <div className="flex justify-content-between align-items-center gap-3">
           <div onClick={() => updateSeed(option)}>
-            {seed[option.name] === undefined ? 0 : seed[option.name]}
+            {seed[option.user] === undefined ? 0 : seed[option.user]}
           </div>
-          <div>{option.name}</div>
+          <div>{option.user}</div>
         </div>
         <div>
           <i
@@ -46,7 +51,7 @@ const SessionSettings = (props) => {
   const addNewPlayer = (e) => {
     setSelectedPlayers([
       ...selectedPlayers,
-      { name: e.value, code: null, seed: selectedPlayers.length + 1 },
+      { user: e.value, code: null, seed: selectedPlayers.length + 1 },
     ]);
     setSeed({ ...seed, [e.value]: selectedPlayers.length + 1 });
   };
@@ -61,19 +66,19 @@ const SessionSettings = (props) => {
           return prevState.filter((item) => item !== person);
         });
         setSeed((prevState) => {
-          const key = person.name;
+          const key = person.user;
           const { [key]: removeKey, ...newItems } = prevState;
           return newItems;
         });
       });
     } else {
       const keys = Object.keys(seed);
-      const added = e.value.filter((person) => !keys.includes(person.name));
+      const added = e.value.filter((person) => !keys.includes(person.user));
       added.map((person, index) => {
         setSeed((prevState) => {
           return {
             ...prevState,
-            [person.name]: index + selectedPlayers.length + 1,
+            [person.user]: index + selectedPlayers.length + 1,
           };
         });
         setSelectedPlayers((prevState) => {
@@ -84,22 +89,22 @@ const SessionSettings = (props) => {
   };
 
   const updateSeed = (option) => {
-    if (seed[option.name] + 1 > selectedPlayers.length) {
-      setSeed({ ...seed, [option.name]: 1 });
+    if (seed[option.user] + 1 > selectedPlayers.length) {
+      setSeed({ ...seed, [option.user]: 1 });
     } else {
-      setSeed({ ...seed, [option.name]: seed[option.name] + 1 });
+      setSeed({ ...seed, [option.user]: seed[option.user] + 1 });
     }
   };
 
   const updatePlayerList = (option) => {
     const updatedList = selectedPlayers.filter(
-      (person) => person.name !== option.name
+      (person) => person.user !== option.user
     );
     setSelectedPlayers(updatedList);
     const newPeople = updatedList.filter((person) => person.code === null);
-    const chipArray = newPeople.map((item) => item.name);
+    const chipArray = newPeople.map((item) => item.user);
     setValue(chipArray);
-    const key = option.name;
+    const key = option.user;
     setSeed((prevState) => {
       const { [key]: removeKey, ...newItems } = prevState;
       return newItems;
@@ -108,7 +113,7 @@ const SessionSettings = (props) => {
 
   const removeNewPlayer = (e) => {
     const newPeople = selectedPlayers.filter(
-      (person) => person.name !== e.value
+      (person) => person.user !== e.value
     );
     setSelectedPlayers(newPeople);
     const key = e.value;
@@ -127,15 +132,19 @@ const SessionSettings = (props) => {
     );
   };
 
-  const handleMount = () => {
+  const handleMount = async () => {
     setDate(sessionContext?.date);
-    setPlayers([
-      { name: "New York", code: "NY", seed: 0 },
-      { name: "Rome", code: "RM", seed: 0 },
-      { name: "London", code: "LDN", seed: 0 },
-      { name: "Istanbul", code: "IST", seed: 0 },
-      { name: "Paris", code: "PRS", seed: 0 },
-    ]);
+    const league = JSON.parse(localStorage.getItem('leagueToken'))
+    console.log(league)
+    try {
+      // const { post } = await axiosAPI.post('/exec?e=LEAGUE')
+      const { post } = await axiosAPI.post(`/exec?e=PARTICIPANTS&q=${league.id}&f=league`);
+      const { data } = await axiosReq.get();
+      setLoaded(true)
+      setPlayers(data.data)
+    } catch (err) {
+      console.log(err)
+    }
   };
 
   useEffect(() => {
@@ -148,7 +157,7 @@ const SessionSettings = (props) => {
   }, [selectedPlayers]);
 
   useEffect(() => {
-    const seedArray = Object.values(seed)
+    const seedArray = Object.values(seed);
     if (new Set(seedArray).size !== seedArray.length) {
       setReady(false);
     } else {
@@ -213,19 +222,27 @@ const SessionSettings = (props) => {
         onChange={(e) => setGameTypeChecked(e.value)}
         className="w-6"
       />
-      <FloatLabel className="mt-4 w-full">
+      {loaded ? (
+        <FloatLabel className="mt-4 w-full">
+          <MultiSelect
+            id="ms-players"
+            value={selectedPlayers}
+            onChange={(e) => addPlayer(e)}
+            options={players}
+            optionLabel="user"
+            maxSelectedLabels={3}
+            className="w-full"
+            pt={{ headerCheckbox: { className: "hidden" } }}
+          />
+          <label htmlFor="ms-players">Existing Players</label>
+        </FloatLabel>
+      ) : (
         <MultiSelect
-          id="ms-players"
-          value={selectedPlayers}
-          onChange={(e) => addPlayer(e)}
-          options={players}
-          optionLabel="name"
-          maxSelectedLabels={3}
-          className="w-full"
-          pt={{ headerCheckbox: { className: "hidden" } }}
+          loading
+          placeholder="Retreiving Player List..."
+          className="mt-4 w-full"
         />
-        <label htmlFor="ms-players">Existing Players</label>
-      </FloatLabel>
+      )}
       <FloatLabel className="mt-4 w-full">
         <Chips
           id="new-players"
@@ -244,7 +261,7 @@ const SessionSettings = (props) => {
           value={selectedPlayers}
           onChange={() => null}
           options={selectedPlayers}
-          optionLabel="name"
+          optionLabel="user"
           itemTemplate={itemTemplate}
           className="w-full mt-2"
           pt={{ list: { className: "p-0" } }}
