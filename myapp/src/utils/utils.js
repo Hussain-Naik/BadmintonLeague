@@ -14,6 +14,14 @@ export const setSessionToken = (data) => {
   localStorage.setItem('leagueSessionToken', JSON.stringify(data))
 }
 
+export const setSessionLeaderboard = (data) => {
+  localStorage.setItem('sessionLeaderboard', JSON.stringify(data))
+}
+
+export const setLeagueLeaderboard = (data) => {
+  localStorage.setItem('leagueLeaderboard', JSON.stringify(data))
+}
+
 export const reloadSession = () => {
   return !!localStorage.getItem('leagueSessionToken')
 }
