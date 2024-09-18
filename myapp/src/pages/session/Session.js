@@ -7,37 +7,38 @@ const Session = () => {
   const session = JSON.parse(localStorage.getItem("leagueSessionToken"));
   const [fixtures, setFixtures] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [Leaderboards, setLeaderboards] = useState([]);
+  const [leaderboards, setLeaderboards] = useState([]);
 
-  const handleMount = async () => {
-    console.log(session);
+  const handleMountFixture = async () => {
     try {
       const { fixtureAPI } = await axiosAPI.post(
         `/exec?e=FIXTURES&q=${session.title}${session.count}&f=fixture_api`
       );
-      const { data } = await axiosReq.get();
-      // const { leaderboardAPI } = await axiosAPI.post(
-      //   `/exec?e=PLAYERS&q=${session.id}&f=session`
-      // );
-      // const { scoreboard } = await axiosReq.get();
-      // setLeaderboards(scoreboard.data);
-      // setFixtures(fixture.data);
-      setLoaded(true);
+      var { data } = await axiosReq.get();
+      
+      setFixtures(data.data);
       console.log(data.data);
-      // console.log(scoreboard.data);
+      const { leaderboardAPI } = await axiosAPI.post(
+        `/exec?e=PLAYERS&q=${session.id}&f=session`
+      );
+      var {data} = await axiosReq.get();
+      setLeaderboards(data);
+      console.log(data);
+      setLoaded(true);
+      
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    handleMount();
+    handleMountFixture();
   }, []);
 
   return (
     <div>
       <div className="grid">
-        <Leaderboard />
+        <Leaderboard {...leaderboards}/>
         <MatchItem />
       </div>
     </div>

@@ -3,10 +3,10 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useSessionContext } from "../../context/SessionContext";
 
-const Leaderboard = () => {
-  const data = [{player: 'Hussain', wins: 2}, {player: 'Tauseef', wins: 1}]
+const Leaderboard = (props) => {
+  // const data = [{player: 'Hussain', leaderboard: 2}, {player: 'Tauseef', leaderboard: 1}]
+  const {data} = props
   const { sessionContext, setSessionContext } = useSessionContext();
-  
 
   return (
     <div className="col-12 lg:col-6">
@@ -14,7 +14,7 @@ const Leaderboard = () => {
       <span className="block text-500 font-medium mb-3">{sessionContext?.name}</span>
         <DataTable value={data} stripedRows showGridlines size="small">
           <Column field="player" header="Player"></Column>
-          <Column field="wins" header="Wins"></Column>
+          <Column field="leaderboard" header="Wins"></Column>
         </DataTable>
       </div>
     </div>
