@@ -3,6 +3,7 @@ import FixtureItem from "../../components/FixtureItem";
 import Leaderboard from "./Leaderboard";
 import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
 import { setSessionLeaderboard } from "../../utils/utils";
+import MatchItem from "../../components/MatchItem";
 
 const Session = () => {
   const session = JSON.parse(localStorage.getItem("leagueSessionToken"));
@@ -14,7 +15,6 @@ const Session = () => {
   const [games, setGames] = useState([]);
 
   const handleMount = async () => {
-    console.log(leaderboards);
     try {
       const { fixtureAPI } = await axiosAPI.post(
         `/exec?e=FIXTURES&q=${session.title}${session.count}&f=fixture_api`
@@ -32,11 +32,9 @@ const Session = () => {
         `/exec?e=MATCH&q=${session.id}&f=session`
       );
       var { data } = await axiosReq.get();
-      console.log(data.data);
       data.data.map((match, index) => {
         if (index % 4 + 1 === match.name) {
           const matches = data.data.filter((item) => item.name === match.name)
-          console.log(matches)
           setGames((prevState) =>
             [...prevState, matches]
           );
@@ -57,9 +55,9 @@ const Session = () => {
       <div className="grid">
         <Leaderboard {...leaderboards} />
         {fixtures.map((set, index) =>
-          index === 1 ? <FixtureItem {...set} key={set.id} /> : null
+          index === games.length % fixtures.length ? <FixtureItem {...set} key={set.id} /> : null
         )}
-        {/* {games.map((item)=> <p>{item}</p>)} */}
+       {games.map((game, index)=><MatchItem {...game} key={index} />)}
       </div>
     </div>
   );
