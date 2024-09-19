@@ -11,7 +11,7 @@ const Session = () => {
   const [leaderboards, setLeaderboards] = useState(
     JSON.parse(localStorage.getItem("sessionLeaderboard"))
   );
-  const [games ,setGames] = useState([])
+  const [games, setGames] = useState([]);
 
   const handleMount = async () => {
     console.log(leaderboards);
@@ -32,8 +32,16 @@ const Session = () => {
         `/exec?e=MATCH&q=${session.id}&f=session`
       );
       var { data } = await axiosReq.get();
-      console.log(data.data)
-      setGames(data.data)
+      console.log(data.data);
+      data.data.map((match, index) => {
+        if (index % 4 + 1 === match.name) {
+          const matches = data.data.filter((item) => item.name === match.name)
+          console.log(matches)
+          setGames((prevState) =>
+            [...prevState, matches]
+          );
+        }
+      });
       setLoaded(true);
     } catch (err) {
       console.log(err);
@@ -49,9 +57,9 @@ const Session = () => {
       <div className="grid">
         <Leaderboard {...leaderboards} />
         {fixtures.map((set, index) =>
-          index === 1 ? <FixtureItem {...set} key={set.id}/> : null
+          index === 1 ? <FixtureItem {...set} key={set.id} /> : null
         )}
-        {loaded ?? games.map()}
+        {/* {games.map((item)=> <p>{item}</p>)} */}
       </div>
     </div>
   );
