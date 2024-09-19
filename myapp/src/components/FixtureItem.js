@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Team from "./Team";
 
-const MatchItem = (props) => {
+const FixtureItem = (props) => {
   const { data } = JSON.parse(localStorage.getItem("sessionLeaderboard"));
   const {
     team1_player1_index,
@@ -36,4 +36,4 @@ const MatchItem = (props) => {
   );
 };
 
-export default MatchItem;
+export default FixtureItem;
