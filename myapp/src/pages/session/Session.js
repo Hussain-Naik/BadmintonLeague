@@ -55,7 +55,7 @@ const Session = () => {
       <div className="grid">
         <Leaderboard {...leaderboards} />
         {fixtures.map((set, index) =>
-          index === games.length % fixtures.length ? <FixtureItem {...set} key={set.id} /> : null
+          index === games.length % fixtures.length ? <FixtureItem props={set} gameInc={games.length +1} setGames={setGames} key={set.id} /> : null
         )}
        {games.map((game, index)=><MatchItem {...game} key={index} />)}
       </div>
