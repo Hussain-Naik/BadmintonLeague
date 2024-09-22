@@ -1,20 +1,22 @@
 {
   "files": {
-    "main.css": "/BadmintonLeague/static/css/main.ddc51d58.css",
-    "main.js": "/BadmintonLeague/static/js/main.30ca81ee.js",
+    "main.css": "/BadmintonLeague/static/css/main.1780a693.css",
+    "main.js": "/BadmintonLeague/static/js/main.ff293c63.js",
     "static/js/453.64512fd7.chunk.js": "/BadmintonLeague/static/js/453.64512fd7.chunk.js",
+    "static/media/InterVariable-Italic.woff2": "/BadmintonLeague/static/media/InterVariable-Italic.e295f70fe3e2df296c7b.woff2",
+    "static/media/InterVariable.woff2": "/BadmintonLeague/static/media/InterVariable.a0e477f2f1f9d2376fde.woff2",
     "static/media/primeicons.svg": "/BadmintonLeague/static/media/primeicons.6ed59f962963a4a73af2.svg",
     "static/media/primeicons.eot": "/BadmintonLeague/static/media/primeicons.ff0c4cd79b2ffca2de54.eot",
     "static/media/primeicons.woff": "/BadmintonLeague/static/media/primeicons.8931fda1930c3bd21e96.woff",
     "static/media/primeicons.ttf": "/BadmintonLeague/static/media/primeicons.a5c2a53d1ff7a9ff5933.ttf",
     "static/media/primeicons.woff2": "/BadmintonLeague/static/media/primeicons.024b32cc7bf399b1a847.woff2",
     "index.html": "/BadmintonLeague/index.html",
-    "main.ddc51d58.css.map": "/BadmintonLeague/static/css/main.ddc51d58.css.map",
-    "main.30ca81ee.js.map": "/BadmintonLeague/static/js/main.30ca81ee.js.map",
+    "main.1780a693.css.map": "/BadmintonLeague/static/css/main.1780a693.css.map",
+    "main.ff293c63.js.map": "/BadmintonLeague/static/js/main.ff293c63.js.map",
     "453.64512fd7.chunk.js.map": "/BadmintonLeague/static/js/453.64512fd7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ddc51d58.css",
-    "static/js/main.30ca81ee.js"
+    "static/css/main.1780a693.css",
+    "static/js/main.ff293c63.js"
   ]
 }
