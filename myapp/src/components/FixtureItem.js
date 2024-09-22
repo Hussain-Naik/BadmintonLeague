@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Team from "./Team";
+import { axiosReq } from "../api/axiosDefaults";
 
-const FixtureItem = ({ props, gameInc, setGames }) => {
+const FixtureItem = ({ props, setGames, games, setLoaded }) => {
   const { data } = JSON.parse(localStorage.getItem("sessionLeaderboard"));
   const session = JSON.parse(localStorage.getItem("leagueSessionToken"));
   const {
@@ -13,7 +14,7 @@ const FixtureItem = ({ props, gameInc, setGames }) => {
   const [sheetData, setSheetData] = useState([
     {
       session: session.id,
-      name: gameInc,
+      name: games.length + 1,
       team: 1,
       player: data.filter((player) => player.seed === team1_player1_index)[0]
         .player,
@@ -21,7 +22,7 @@ const FixtureItem = ({ props, gameInc, setGames }) => {
     },
     {
       session: session.id,
-      name: gameInc,
+      name: games.length + 1,
       team: 1,
       player: data.filter((player) => player.seed === team1_player2_index)[0]
         .player,
@@ -29,7 +30,7 @@ const FixtureItem = ({ props, gameInc, setGames }) => {
     },
     {
       session: session.id,
-      name: gameInc,
+      name: games.length + 1,
       team: 2,
       player: data.filter((player) => player.seed === team2_player1_index)[0]
         .player,
@@ -37,7 +38,7 @@ const FixtureItem = ({ props, gameInc, setGames }) => {
     },
     {
       session: session.id,
-      name: gameInc,
+      name: games.length + 1,
       team: 2,
       player: data.filter((player) => player.seed === team2_player2_index)[0]
         .player,
@@ -77,6 +78,25 @@ const FixtureItem = ({ props, gameInc, setGames }) => {
       team1.map((player) => (player.win = 0));
     }
     setGames((prevState) => [...prevState, sheetData]);
+    setLoaded((prevState)=> !prevState)
+    handleSubmit()
+    
+  };
+
+  const handleSubmit = async () => {
+    const postMatch = {};
+    sheetData.map((key, index) => {
+      postMatch[index + 1] = {
+        sheetname: "MATCH",
+        ...key
+      };
+    });
+    const matchJSON = JSON.stringify(postMatch);
+    try {
+      const post = await axiosReq.post(`/exec?post=${matchJSON}`);
+      setGames([...games, post.data.data])
+      setLoaded((prevState)=> !prevState)
+    } catch (error) {}
   };
 
   return (

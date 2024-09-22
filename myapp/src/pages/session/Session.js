@@ -50,28 +50,36 @@ const Session = () => {
 
   useEffect(() => {
     const score = [...leaderboards.data];
-    const newgList = [...games]
+    const newgList = [...games];
     score.map((item) => {
-      const count = newgList.flat().filter((gameF)=> gameF.player === item.player && gameF.win === 1).length;
-      item.leaderboard = count
+      const count = newgList
+        .flat()
+        .filter(
+          (gameF) => gameF.player === item.player && gameF.win === 1
+        ).length;
+      item.leaderboard = count;
     });
-    setLeaderboards({...leaderboards, data: score})
+    setLeaderboards({ ...leaderboards, data: score });
   }, [games]);
 
   return (
     <div>
       <div className="grid">
         <Leaderboard {...leaderboards} />
-        {fixtures.map((set, index) =>
-          index === games.length % fixtures.length ? (
-            <FixtureItem
-              props={set}
-              gameInc={games.length + 1}
-              setGames={setGames}
-              key={set.id}
-            />
-          ) : null
-        )}
+        {loaded
+          ? fixtures.map((set, index) =>
+              index === games.length % fixtures.length ? (
+                <FixtureItem
+                  props={set}
+                  setGames={setGames}
+                  setLoaded={setLoaded}
+                  games={games}
+                  key={set.id}
+                />
+              ) : null
+            )
+          : null}
+
         {games.map((game, index) => (
           <MatchItem {...game} key={index} />
         ))}
