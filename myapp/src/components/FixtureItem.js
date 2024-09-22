@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Team from "./Team";
 
-const FixtureItem = ({props, gameInc, setGames}) => {
+const FixtureItem = ({ props, gameInc, setGames }) => {
   const { data } = JSON.parse(localStorage.getItem("sessionLeaderboard"));
   const session = JSON.parse(localStorage.getItem("leagueSessionToken"));
   const {
@@ -67,30 +67,26 @@ const FixtureItem = ({props, gameInc, setGames}) => {
   });
 
   const handleClick = (arg) => {
-    const team1 = sheetData.filter((player) => player.team === 1)
-    const team2 = sheetData.filter((player) => player.team === 2)
-    if (arg === 1){
-      team1.map((player)=> player.win = 1)
-      team2.map((player)=> player.win = 0)
+    const team1 = sheetData.filter((player) => player.team === 1);
+    const team2 = sheetData.filter((player) => player.team === 2);
+    if (arg === 1) {
+      team1.map((player) => (player.win = 1));
+      team2.map((player) => (player.win = 0));
+    } else {
+      team2.map((player) => (player.win = 1));
+      team1.map((player) => (player.win = 0));
     }
-    else {
-      team2.map((player)=> player.win = 1)
-      team1.map((player)=> player.win = 0)
-    }
-    console.log(team1, team2)
-    setGames((prevState) =>
-      [...prevState, sheetData])
+    setGames((prevState) => [...prevState, sheetData]);
   };
 
-  console.log(sheetData);
   return (
     <div className="col-12 lg:col-6">
       <div className="flex justify-content-between align-items-center surface-0 shadow-2 p-3 border-1 border-50 border-round">
-        <div className="flex-grow-1" onClick={()=>handleClick(1)}>
+        <div className="flex-grow-1" onClick={() => handleClick(1)}>
           <Team {...team.team1} />
         </div>
         <span>VS</span>
-        <div className="flex-grow-1" onClick={()=>handleClick(2)}>
+        <div className="flex-grow-1" onClick={() => handleClick(2)}>
           <Team {...team.team2} />
         </div>
       </div>

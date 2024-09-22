@@ -4,7 +4,6 @@ import { winPosition } from "../utils/utils";
 
 const Team = (props) => {
   const {team} = props
-  console.log(team);
   return (
     <>
     {team[0][0].team === 1 ? <WinDisplay result={team[0][0].win} /> : <WinDisplay result={0} />}

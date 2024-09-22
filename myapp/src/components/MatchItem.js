@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Team from "./Team";
 
 const MatchItem = (props) => {
-  const { data } = Object.values(props);
-  console.log(Object.values(props))
   const [team, setTeam] = useState({
     team1: {
       team: [
@@ -24,6 +22,7 @@ const MatchItem = (props) => {
   });
   return (
     <div className="col-12 lg:col-6">
+      <span>game {props[0].name}</span>
       <div className="flex justify-content-between align-items-center surface-0 shadow-2 p-3 border-1 border-50 border-round">
         <Team {...team.team1} />
         <span>VS</span>

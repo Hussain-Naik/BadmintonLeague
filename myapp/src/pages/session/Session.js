@@ -33,11 +33,9 @@ const Session = () => {
       );
       var { data } = await axiosReq.get();
       data.data.map((match, index) => {
-        if (index % 4 + 1 === match.name) {
-          const matches = data.data.filter((item) => item.name === match.name)
-          setGames((prevState) =>
-            [...prevState, matches]
-          );
+        if ((index % 4) + 1 === match.name) {
+          const matches = data.data.filter((item) => item.name === match.name);
+          setGames((prevState) => [...prevState, matches]);
         }
       });
       setLoaded(true);
@@ -50,14 +48,33 @@ const Session = () => {
     handleMount();
   }, []);
 
+  useEffect(() => {
+    const score = [...leaderboards.data];
+    const newgList = [...games]
+    score.map((item) => {
+      const count = newgList.flat().filter((gameF)=> gameF.player === item.player && gameF.win === 1).length;
+      item.leaderboard = count
+    });
+    setLeaderboards({...leaderboards, data: score})
+  }, [games]);
+
   return (
     <div>
       <div className="grid">
         <Leaderboard {...leaderboards} />
         {fixtures.map((set, index) =>
-          index === games.length % fixtures.length ? <FixtureItem props={set} gameInc={games.length +1} setGames={setGames} key={set.id} /> : null
+          index === games.length % fixtures.length ? (
+            <FixtureItem
+              props={set}
+              gameInc={games.length + 1}
+              setGames={setGames}
+              key={set.id}
+            />
+          ) : null
         )}
-       {games.map((game, index)=><MatchItem {...game} key={index} />)}
+        {games.map((game, index) => (
+          <MatchItem {...game} key={index} />
+        ))}
       </div>
     </div>
   );
