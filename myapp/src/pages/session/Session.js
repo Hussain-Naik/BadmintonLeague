@@ -65,7 +65,7 @@ const Session = () => {
   return (
     <div>
       <div className="grid">
-        <Leaderboard {...leaderboards} />
+        {loaded ? <Leaderboard {...leaderboards} /> : <Leaderboard />}
         {fixtures.map((set, index) =>
           index === games.length % fixtures.length ? (
             <FixtureItem
