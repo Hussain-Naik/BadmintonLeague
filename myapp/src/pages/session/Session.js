@@ -66,19 +66,18 @@ const Session = () => {
     <div>
       <div className="grid">
         <Leaderboard {...leaderboards} />
-        {loaded
-          ? fixtures.map((set, index) =>
-              index === games.length % fixtures.length ? (
-                <FixtureItem
-                  props={set}
-                  setGames={setGames}
-                  setLoaded={setLoaded}
-                  games={games}
-                  key={set.id}
-                />
-              ) : null
-            )
-          : null}
+        {fixtures.map((set, index) =>
+          index === games.length % fixtures.length ? (
+            <FixtureItem
+              props={set}
+              setGames={setGames}
+              loaded={loaded}
+              setLoaded={setLoaded}
+              games={games}
+              key={set.id}
+            />
+          ) : null
+        )}
 
         {games.map((game, index) => (
           <MatchItem {...game} key={index} />

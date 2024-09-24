@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Team from "./Team";
 import { axiosReq } from "../api/axiosDefaults";
 
-const FixtureItem = ({ props, setGames, games, setLoaded }) => {
+const FixtureItem = ({ props, setGames, games, setLoaded, loaded }) => {
   const { data } = JSON.parse(localStorage.getItem("sessionLeaderboard"));
   const session = JSON.parse(localStorage.getItem("leagueSessionToken"));
   const {
@@ -102,11 +102,11 @@ const FixtureItem = ({ props, setGames, games, setLoaded }) => {
   return (
     <div className="col-12 lg:col-6">
       <div className="flex justify-content-between align-items-center surface-0 shadow-2 p-3 border-1 border-50 border-round">
-        <div className="flex-grow-1" onClick={() => handleClick(1)}>
+        <div className="flex-grow-1" onClick={() => {loaded ? handleClick(1) : console.log('disabled')}}>
           <Team {...team.team1} />
         </div>
-        <span>VS</span>
-        <div className="flex-grow-1" onClick={() => handleClick(2)}>
+        <span>{loaded ? "VS": null}</span>
+        <div className="flex-grow-1" onClick={() => {loaded ? handleClick(2) : console.log('disabled')}}>
           <Team {...team.team2} />
         </div>
       </div>
