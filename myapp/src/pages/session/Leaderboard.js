@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Skeleton } from "primereact/skeleton";
 import { useSessionContext } from "../../context/SessionContext";
 
 const Leaderboard = (props) => {
-  const emptyData = [{player: 'Hussain', leaderboard: 2}, {player: 'Tauseef', leaderboard: 1}]
+  const emptyData = [{player: 'Hussain', leaderboard: 2}]
   const { data } = props;
-  const [empty, setEmpty] = useState(data === undefined ? true : false);
+  const [empty, setEmpty] = useState(false);
   const { sessionContext, setSessionContext } = useSessionContext();
-  console.log(empty);
+
+  useEffect(() => {
+    if (data === undefined) {
+      setEmpty(false)
+    }
+    else {
+      setEmpty(true)
+    }
+  }, [data]);
+
   return (
     <div className="col-12 lg:col-6">
       <div className="surface-0 shadow-2 p-3 border-1 border-50 border-round">
