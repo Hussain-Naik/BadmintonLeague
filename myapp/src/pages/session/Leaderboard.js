@@ -6,15 +6,7 @@ import { useSessionContext } from "../../context/SessionContext";
 
 const Leaderboard = (props) => {
   const emptyData = [{player: 'Hussain', leaderboard: 2}]
-  const { data } = props;
-  const [empty, setEmpty] = useState(false);
   const { sessionContext, setSessionContext } = useSessionContext();
-
-  useEffect(() => {
-    if (data !== undefined) {
-      setEmpty(true)
-    }
-  }, [data]);
 
   return (
     <div className="col-12 lg:col-6">
@@ -22,15 +14,15 @@ const Leaderboard = (props) => {
         <span className="block text-500 font-medium mb-3">
           {sessionContext?.name}
         </span>
-        {empty ? (
-          <DataTable value={data} stripedRows showGridlines size="small">
-            <Column field="player" header="Player"></Column>
-            <Column field="leaderboard" header="Wins"></Column>
-          </DataTable>
-        ) : (
+        {props?.data === undefined ? (
           <DataTable value={emptyData} stripedRows showGridlines size="small">
             <Column field="player" header="Player" body={<Skeleton />}></Column>
             <Column field="leaderboard" header="Wins" body={<Skeleton />}></Column>
+          </DataTable>
+        ) : (
+          <DataTable value={props?.data} stripedRows showGridlines size="small">
+            <Column field="player" header="Player"></Column>
+            <Column field="leaderboard" header="Wins"></Column>
           </DataTable>
         )}
       </div>

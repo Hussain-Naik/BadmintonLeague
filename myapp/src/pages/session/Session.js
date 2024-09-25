@@ -32,8 +32,9 @@ const Session = () => {
         `/exec?e=MATCH&q=${session.id}&f=session`
       );
       var { data } = await axiosReq.get();
+      console.log(data)
       data.data.map((match, index) => {
-        if ((index % 4) + 1 === match.name) {
+        if (index % 4 === 0) {
           const matches = data.data.filter((item) => item.name === match.name);
           setGames((prevState) => [...prevState, matches]);
         }
@@ -49,23 +50,25 @@ const Session = () => {
   }, []);
 
   useEffect(() => {
-    const score = [...leaderboards.data];
-    const newgList = [...games];
-    score.map((item) => {
-      const count = newgList
-        .flat()
-        .filter(
-          (gameF) => gameF.player === item.player && gameF.win === 1
-        ).length;
-      item.leaderboard = count;
-    });
-    setLeaderboards({ ...leaderboards, data: score });
+    if (loaded) {
+      const score = [...leaderboards?.data];
+      const newgList = [...games];
+      score.map((item) => {
+        const count = newgList
+          .flat()
+          .filter(
+            (gameF) => gameF.player === item.player && gameF.win === 1
+          ).length;
+        item.leaderboard = count;
+      });
+      setLeaderboards({ ...leaderboards, data: score });
+    }
   }, [games]);
 
   return (
     <div>
       <div className="grid">
-        {loaded ? <Leaderboard {...leaderboards} /> : <Leaderboard />}
+        <Leaderboard {...leaderboards} />
         {fixtures.map((set, index) =>
           index === games.length % fixtures.length ? (
             <FixtureItem
