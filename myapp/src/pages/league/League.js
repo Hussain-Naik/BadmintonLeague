@@ -4,16 +4,24 @@ import Leaderboard from "./Leaderboard";
 import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
 
 const League = () => {
-  const [loaded, setLoaded] = useState(false)
-  const [sessionItems, setSessionItems] = useState([])
+  const [loaded, setLoaded] = useState(false);
+  const [sessionItems, setSessionItems] = useState([]);
+  const [leaderboards, setLeaderboards] = useState();
   const league = JSON.parse(localStorage.getItem("leagueToken"));
 
   const handleMount = async () => {
     try {
-      const { post } = await axiosAPI.post(`/exec?e=SESSIONS&q=${league.id}&f=league`);
-      const { data } = await axiosReq.get();
-      setSessionItems(data.data)
-      setLoaded(true)
+      const { leaderboardAPI } = await axiosAPI.post(
+        `/exec?e=PARTICIPANTS&q=${league.id}&f=league`
+      );
+      var { data } = await axiosReq.get();
+      setLeaderboards(data);
+      const { sessionAPI } = await axiosAPI.post(
+        `/exec?e=SESSIONS&q=${league.id}&f=league`
+      );
+      var { data } = await axiosReq.get();
+      setSessionItems(data.data);
+      setLoaded(true);
     } catch (error) {}
   };
 
@@ -23,8 +31,10 @@ const League = () => {
 
   return (
     <div className="grid">
-      <Leaderboard />
-      {sessionItems.map((session) => (<SessionItems key={session.id} {...session}/>))}
+      <Leaderboard {...leaderboards}/>
+      {sessionItems.map((session) => (
+        <SessionItems key={session.id} {...session} />
+      ))}
     </div>
   );
 };
