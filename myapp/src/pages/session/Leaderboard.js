@@ -11,10 +11,7 @@ const Leaderboard = (props) => {
   const { sessionContext, setSessionContext } = useSessionContext();
 
   useEffect(() => {
-    if (data === undefined) {
-      setEmpty(false)
-    }
-    else {
+    if (data !== undefined) {
       setEmpty(true)
     }
   }, [data]);
