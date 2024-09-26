@@ -33,9 +33,9 @@ const SessionSettings = (props) => {
       <div className="flex justify-content-between align-items-center">
         <div className="flex justify-content-between align-items-center gap-3">
           <div onClick={() => updateSeed(option)}>
-            {seed[option.user] === undefined ? 0 : seed[option.user]}
+            {seed[option.player] === undefined ? 0 : seed[option.player]}
           </div>
-          <div>{option.user}</div>
+          <div>{option.player}</div>
         </div>
         <div>
           <i
@@ -50,7 +50,7 @@ const SessionSettings = (props) => {
   const addNewPlayer = (e) => {
     setSelectedPlayers([
       ...selectedPlayers,
-      { id: null, league: league.id, user: e.value },
+      { id: null, league: league.id, player: e.value },
     ]);
     setSeed({ ...seed, [e.value]: selectedPlayers.length + 1 });
   };
@@ -65,19 +65,19 @@ const SessionSettings = (props) => {
           return prevState.filter((item) => item !== person);
         });
         setSeed((prevState) => {
-          const key = person.user;
+          const key = person.player;
           const { [key]: removeKey, ...newItems } = prevState;
           return newItems;
         });
       });
     } else {
       const keys = Object.keys(seed);
-      const added = e.value.filter((person) => !keys.includes(person.user));
+      const added = e.value.filter((person) => !keys.includes(person.player));
       added.map((person, index) => {
         setSeed((prevState) => {
           return {
             ...prevState,
-            [person.user]: index + selectedPlayers.length + 1,
+            [person.player]: index + selectedPlayers.length + 1,
           };
         });
         setSelectedPlayers((prevState) => {
@@ -88,22 +88,22 @@ const SessionSettings = (props) => {
   };
 
   const updateSeed = (option) => {
-    if (seed[option.user] + 1 > selectedPlayers.length) {
-      setSeed({ ...seed, [option.user]: 1 });
+    if (seed[option.player] + 1 > selectedPlayers.length) {
+      setSeed({ ...seed, [option.player]: 1 });
     } else {
-      setSeed({ ...seed, [option.user]: seed[option.user] + 1 });
+      setSeed({ ...seed, [option.player]: seed[option.player] + 1 });
     }
   };
 
   const updatePlayerList = (option) => {
     const updatedList = selectedPlayers.filter(
-      (person) => person.user !== option.user
+      (person) => person.player !== option.player
     );
     setSelectedPlayers(updatedList);
     const newPeople = updatedList.filter((person) => person.id === null);
-    const chipArray = newPeople.map((item) => item.user);
+    const chipArray = newPeople.map((item) => item.player);
     setValue(chipArray);
-    const key = option.user;
+    const key = option.player;
     setSeed((prevState) => {
       const { [key]: removeKey, ...newItems } = prevState;
       return newItems;
@@ -112,7 +112,7 @@ const SessionSettings = (props) => {
 
   const removeNewPlayer = (e) => {
     const newPeople = selectedPlayers.filter(
-      (person) => person.user !== e.value
+      (person) => person.player !== e.value
     );
     setSelectedPlayers(newPeople);
     const key = e.value;
@@ -189,8 +189,8 @@ const SessionSettings = (props) => {
         `/exec?e=PARTICIPANTS&q=${league.id}&f=league`
       );
       const { data } = await axiosReq.get();
-      setLoaded(true);
       setPlayers(data.data);
+      setLoaded(true);
     } catch (err) {
       console.log(err);
     }
@@ -278,7 +278,7 @@ const SessionSettings = (props) => {
             value={selectedPlayers}
             onChange={(e) => addPlayer(e)}
             options={players}
-            optionLabel="user"
+            optionLabel="player"
             maxSelectedLabels={3}
             className="w-full"
             pt={{ headerCheckbox: { className: "hidden" } }}
@@ -310,7 +310,7 @@ const SessionSettings = (props) => {
           value={selectedPlayers}
           onChange={() => null}
           options={selectedPlayers}
-          optionLabel="user"
+          optionLabel="player"
           itemTemplate={itemTemplate}
           className="w-full mt-2"
           pt={{ list: { className: "p-0" } }}
