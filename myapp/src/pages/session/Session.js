@@ -9,6 +9,7 @@ const Session = () => {
   const session = JSON.parse(localStorage.getItem("leagueSessionToken"));
   const [fixtures, setFixtures] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [ready, setReady] = useState(false);
   const [leaderboards, setLeaderboards] = useState(
     JSON.parse(localStorage.getItem("sessionLeaderboard"))
   );
@@ -20,7 +21,6 @@ const Session = () => {
         `/exec?e=FIXTURES&q=${session.title}${session.count}&f=fixture_api`
       );
       var { data } = await axiosReq.get();
-
       setFixtures(data.data);
       const { leaderboardAPI } = await axiosAPI.post(
         `/exec?e=PLAYERS&q=${session.id}&f=session`
@@ -32,7 +32,6 @@ const Session = () => {
         `/exec?e=MATCH&q=${session.id}&f=session`
       );
       var { data } = await axiosReq.get();
-      console.log(data)
       data.data.map((match, index) => {
         if (index % 4 === 0) {
           const matches = data.data.filter((item) => item.name === match.name);
@@ -40,6 +39,7 @@ const Session = () => {
         }
       });
       setLoaded(true);
+      setReady(true)
     } catch (err) {
       console.log(err);
     }
@@ -69,18 +69,20 @@ const Session = () => {
     <div>
       <div className="grid">
         <Leaderboard {...leaderboards} />
-        {fixtures.map((set, index) =>
-          index === games.length % fixtures.length ? (
-            <FixtureItem
-              props={set}
-              setGames={setGames}
-              loaded={loaded}
-              setLoaded={setLoaded}
-              games={games}
-              key={set.id}
-            />
-          ) : null
-        )}
+        {ready
+          ? fixtures.map((set, index) =>
+              index === games.length % fixtures.length ? (
+                <FixtureItem
+                  props={set}
+                  setGames={setGames}
+                  loaded={loaded}
+                  setLoaded={setLoaded}
+                  games={games}
+                  key={set.id}
+                />
+              ) : null
+            )
+          : null}
 
         {games.map((game, index) => (
           <MatchItem {...game} key={index} />

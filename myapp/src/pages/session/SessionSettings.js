@@ -147,19 +147,19 @@ const SessionSettings = (props) => {
     };
     const sessionJSON = JSON.stringify(postObject);
     try {
+      const keys = Object.keys(seed);
+      const values = Object.values(seed);
       const post = await axiosReq.post(`/exec?post=${sessionJSON}`);
       const { id, date, player_count, game_type, player_type } =
         post.data.data[0];
       const sessionObject = {
         title: `${player_type} ${game_type}`,
         name: date,
-        count: player_count,
+        count: values.length,
         id: id,
       };
       setSessionContext(sessionObject);
       setSessionToken(sessionObject);
-      const keys = Object.keys(seed);
-      const values = Object.values(seed);
       const postPlayers = {}
       keys.map((key, index) => {
         postPlayers[index + 1] = {sheetname: 'PLAYERS', player: key, seed: values[index], session: id}
@@ -169,13 +169,16 @@ const SessionSettings = (props) => {
       const postParticipants = {}
       if (value.length > 0) {
         value.map((item, index) => {
-          postParticipants[index + 1] = {sheetname: 'PARTICIPANTS', user: item, league: league.id}
+          postParticipants[index + 1] = {sheetname: 'PARTICIPANTS', player: item, league: league.id}
         });
         const participantsJSON = JSON.stringify(postParticipants);
+        console.log(participantsJSON)
         const postParticipant = await axiosReq.post(`/exec?post=${participantsJSON}`);
       }
       navigate("/session/");
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleMount = async () => {

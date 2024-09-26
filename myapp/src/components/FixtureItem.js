@@ -11,7 +11,6 @@ const FixtureItem = ({ props, setGames, games, setLoaded, loaded }) => {
     team2_player1_index,
     team2_player2_index,
   } = props;
-  console.log(games.length + 1)
   const [sheetData, setSheetData] = useState([
     {
       session: session.id,
