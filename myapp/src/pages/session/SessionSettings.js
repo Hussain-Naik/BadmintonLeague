@@ -160,24 +160,35 @@ const SessionSettings = (props) => {
       };
       setSessionContext(sessionObject);
       setSessionToken(sessionObject);
-      const postPlayers = {}
+      const postPlayers = {};
       keys.map((key, index) => {
-        postPlayers[index + 1] = {sheetname: 'PLAYERS', player: key, seed: values[index], session: id}
+        postPlayers[index + 1] = {
+          sheetname: "PLAYERS",
+          player: key,
+          seed: values[index],
+          session: id,
+        };
       });
       const playerJSON = JSON.stringify(postPlayers);
       const postPlayer = await axiosReq.post(`/exec?post=${playerJSON}`);
-      const postParticipants = {}
+      const postParticipants = {};
       if (value.length > 0) {
         value.map((item, index) => {
-          postParticipants[index + 1] = {sheetname: 'PARTICIPANTS', player: item, league: league.id}
+          postParticipants[index + 1] = {
+            sheetname: "PARTICIPANTS",
+            player: item,
+            league: league.id,
+          };
         });
         const participantsJSON = JSON.stringify(postParticipants);
-        console.log(participantsJSON)
-        const postParticipant = await axiosReq.post(`/exec?post=${participantsJSON}`);
+        console.log(participantsJSON);
+        const postParticipant = await axiosReq.post(
+          `/exec?post=${participantsJSON}`
+        );
       }
       navigate("/session/");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -272,19 +283,21 @@ const SessionSettings = (props) => {
         className="w-6"
       />
       {loaded ? (
-        <FloatLabel className="mt-4 w-full">
-          <MultiSelect
-            id="ms-players"
-            value={selectedPlayers}
-            onChange={(e) => addPlayer(e)}
-            options={players}
-            optionLabel="player"
-            maxSelectedLabels={3}
-            className="w-full"
-            pt={{ headerCheckbox: { className: "hidden" } }}
-          />
-          <label htmlFor="ms-players">Existing Players</label>
-        </FloatLabel>
+        selectedPlayers.length > 0 ? (
+          <FloatLabel className="mt-4 w-full">
+            <MultiSelect
+              id="ms-players"
+              value={selectedPlayers}
+              onChange={(e) => addPlayer(e)}
+              options={players}
+              optionLabel="player"
+              maxSelectedLabels={3}
+              className="w-full"
+              pt={{ headerCheckbox: { className: "hidden" } }}
+            />
+            <label htmlFor="ms-players">Existing Players</label>
+          </FloatLabel>
+        ) : null
       ) : (
         <MultiSelect
           loading
