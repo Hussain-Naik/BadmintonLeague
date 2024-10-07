@@ -5,15 +5,22 @@ import { useSessionContext } from "../../context/SessionContext";
 import { setSessionToken } from "../../utils/utils";
 
 const SessionItems = (props) => {
-  const { id, date, player_count, game_type, player_type } = props;
-  const sessionObject = { title: `${player_type} ${game_type}`, name: date, count: player_count, id: id };
+  const { id, date, player_count, game_type, player_type, progress, count } =
+    props;
+  const sessionObject = {
+    title: `${player_type} ${game_type}`,
+    name: date,
+    count: player_count,
+    id: id,
+    progress: progress,
+    max: count,
+  };
   const { sessionContext, setSessionContext } = useSessionContext();
   const navigate = useNavigate();
 
-
   const handleClick = () => {
     setSessionContext(sessionObject);
-    setSessionToken(sessionObject)
+    setSessionToken(sessionObject);
     navigate("/session/");
   };
 

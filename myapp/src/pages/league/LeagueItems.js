@@ -6,9 +6,9 @@ import { setLeagueToken } from "../../utils/utils";
 import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
 
 const LeagueItems = (props) => {
-  const { id, name } = props;
+  const { id, name, count } = props;
   const navigate = useNavigate();
-  const leagueObject = { title: "League", name: name, count: 4, id: id };
+  const leagueObject = { title: "League", name: name, count: count, id: id };
   const { leagueContext, setLeagueContext } = useLeagueContext();
 
   const handleClick = async () => {
