@@ -100,7 +100,7 @@ const FixtureItem = ({ props, setGames, games, setLoaded, loaded }) => {
   };
 
   return (
-    <div className="col-12 lg:col-6 print-hidden">
+    <div className="col-12 lg:col-6">
       <div className="flex justify-content-between align-items-center surface-0 shadow-2 p-3 border-1 border-50 border-round">
         <div className="flex-grow-1" onClick={() => {loaded ? handleClick(1) : console.log('disabled')}}>
           <Team {...team.team1} />
