@@ -283,7 +283,7 @@ const SessionSettings = (props) => {
         className="w-6"
       />
       {loaded ? (
-        selectedPlayers.length > 0 ? (
+        players.length > 0 ? (
           <FloatLabel className="mt-4 w-full">
             <MultiSelect
               id="ms-players"

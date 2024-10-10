@@ -4,7 +4,6 @@ import { ProgressBar } from "primereact/progressbar";
 const CardItem = (props) => {
   const { title, name, count, id, progress, max } = props;
   const progress_display = progress / max;
-  console.log(progress_display)
 
   const valueTemplate = (value) => {
     return (
