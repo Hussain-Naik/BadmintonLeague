@@ -7,7 +7,7 @@ import { Chips } from "primereact/chips";
 import { Button } from "primereact/button";
 import { ToggleButton } from "primereact/togglebutton";
 import { FloatLabel } from "primereact/floatlabel";
-import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
+import { axiosReq } from "../../api/axiosDefaults";
 import { useNavigate } from "react-router-dom";
 import { setSessionToken } from "../../utils/utils";
 
@@ -195,11 +195,7 @@ const SessionSettings = (props) => {
   const handleMount = async () => {
     setDate(sessionContext?.date);
     try {
-      // const { post } = await axiosAPI.post('/exec?e=LEAGUE')
-      const { post } = await axiosAPI.post(
-        `/exec?e=PARTICIPANTS&q=${league.id}&f=league`
-      );
-      const { data } = await axiosReq.get();
+      const { data } = await axiosReq.get(`/exec?sheetname=PARTICIPANTS&q=${league.id}&f=league`);
       setPlayers(data.data);
       setLoaded(true);
     } catch (err) {

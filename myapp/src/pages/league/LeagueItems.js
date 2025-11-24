@@ -3,7 +3,6 @@ import CardItem from "../../components/CardItem";
 import { useNavigate } from "react-router-dom";
 import { useLeagueContext } from "../../context/LeagueContext";
 import { setLeagueToken } from "../../utils/utils";
-import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
 
 const LeagueItems = (props) => {
   const { id, name, count } = props;

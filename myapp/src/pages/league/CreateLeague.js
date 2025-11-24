@@ -4,7 +4,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
-import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
+import { axiosReq } from "../../api/axiosDefaults";
 import { useLeagueContext } from "../../context/LeagueContext";
 import { setLeagueToken } from "../../utils/utils";
 
@@ -24,7 +24,6 @@ const CreateLeague = ({ visible, setVisible }) => {
       const leagueObject = { title: "League", count: 4, ...post.data.data[0] };
       setLeagueContext(leagueObject)
       setLeagueToken(leagueObject);
-      const { postAPI } = await axiosAPI.post(`/exec?e=SESSIONS&q=${leagueObject.id}&f=league`);
       setVisible(!visible);
       navigate('league/')
     } catch (error) {}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SessionItems from "../session/SessionItems";
 import Leaderboard from "./Leaderboard";
-import { axiosAPI, axiosReq } from "../../api/axiosDefaults";
+import { axiosReq } from "../../api/axiosDefaults";
 
 const League = () => {
   const [loaded, setLoaded] = useState(false);
@@ -11,15 +11,9 @@ const League = () => {
 
   const handleMount = async () => {
     try {
-      const { leaderboardAPI } = await axiosAPI.post(
-        `/exec?e=PARTICIPANTS&q=${league.id}&f=league`
-      );
-      var { data } = await axiosReq.get();
+      var { data } = await axiosReq.get(`/exec?sheetname=PARTICIPANTS&q=${league.id}&f=league`);
       setLeaderboards(data);
-      const { sessionAPI } = await axiosAPI.post(
-        `/exec?e=SESSIONS&q=${league.id}&f=league`
-      );
-      var { data } = await axiosReq.get();
+      var { data } = await axiosReq.get(`/exec?sheetname=SESSIONS&q=${league.id}&f=league`);
       setSessionItems(data.data);
       setLoaded(true);
     } catch (error) {}
